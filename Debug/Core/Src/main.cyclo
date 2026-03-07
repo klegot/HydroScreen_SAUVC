@@ -1,14 +1,14 @@
-../Core/Inc/layouts/main_menu.hpp:42:15:BaseMenu::~BaseMenu()	1
-../Core/Inc/layouts/main_menu.hpp:42:15:virtual BaseMenu::~BaseMenu()	1
-../Core/Inc/layouts/main_menu.hpp:54:7:virtual void MainMenu::DataUpdate(const SystemData*)	1
-../Core/Inc/layouts/main_menu.hpp:55:11:virtual BaseMenu::MenuType MainMenu::GetType() const	1
-../Core/Inc/layouts/main_menu.hpp:28:7:constexpr BaseMenu::BaseMenu()	1
-../Core/Inc/layouts/main_menu.hpp:56:2:MainMenu::MainMenu()	1
-../Core/Inc/layouts/main_menu.hpp:62:6:virtual void MainMenu::CursorUp()	2
-../Core/Inc/layouts/main_menu.hpp:69:6:virtual void MainMenu::CursorDown()	2
-../Core/Inc/layouts/main_menu.hpp:76:5:virtual int MainMenu::Enter()	1
-../Core/Inc/layouts/main_menu.hpp:81:6:virtual void MainMenu::DrawCursor()	1
-../Core/Inc/layouts/main_menu.hpp:87:6:virtual void MainMenu::Draw()	1
+../Core/Inc/layouts/main_menu.hpp:44:15:BaseMenu::~BaseMenu()	1
+../Core/Inc/layouts/main_menu.hpp:44:15:virtual BaseMenu::~BaseMenu()	1
+../Core/Inc/layouts/main_menu.hpp:56:7:virtual void MainMenu::DataUpdate(const SystemData*)	1
+../Core/Inc/layouts/main_menu.hpp:57:11:virtual BaseMenu::MenuType MainMenu::GetType() const	1
+../Core/Inc/layouts/main_menu.hpp:29:7:constexpr BaseMenu::BaseMenu()	1
+../Core/Inc/layouts/main_menu.hpp:58:2:MainMenu::MainMenu()	1
+../Core/Inc/layouts/main_menu.hpp:64:6:virtual void MainMenu::CursorUp()	2
+../Core/Inc/layouts/main_menu.hpp:71:6:virtual void MainMenu::CursorDown()	2
+../Core/Inc/layouts/main_menu.hpp:78:5:virtual int MainMenu::Enter()	1
+../Core/Inc/layouts/main_menu.hpp:83:6:virtual void MainMenu::DrawCursor()	1
+../Core/Inc/layouts/main_menu.hpp:89:6:virtual void MainMenu::Draw()	1
 ../Core/Inc/layouts/bottom_stroke.hpp:33:2:BottomSTR::BottomSTR()	1
 ../Core/Inc/layouts/bottom_stroke.hpp:44:5:int BottomSTR::CalculatePercent(const char*)	5
 ../Core/Inc/layouts/bottom_stroke.hpp:64:6:void BottomSTR::DataUpdate(const SystemData*)	1
@@ -31,17 +31,28 @@
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:70:6:void VmaMenu::Cancel()	1
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:74:6:virtual void VmaMenu::DrawCursor()	1
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:78:6:virtual void VmaMenu::Draw()	5
-../Core/Src/main.cpp:92:6:void ParseData(const char*)	13
-../Core/Src/main.cpp:154:5:int main()	14
-../Core/Src/main.cpp:295:6:void SystemClock_Config()	3
-../Core/Src/main.cpp:335:13:void MX_I2C1_Init()	2
-../Core/Src/main.cpp:369:13:void MX_USART1_UART_Init()	2
-../Core/Src/main.cpp:402:13:void MX_GPIO_Init()	1
-../Core/Src/main.cpp:438:6:void HAL_UART_RxCpltCallback(UART_HandleTypeDef*)	5
-../Core/Src/main.cpp:463:6:void Error_Handler()	1
+../Core/Inc/layouts/mission_launch_menu.hpp:32:11:virtual BaseMenu::MenuType MissionsMenu::GetType() const	1
+../Core/Inc/layouts/mission_launch_menu.hpp:34:2:MissionsMenu::MissionsMenu()	2
+../Core/Inc/layouts/mission_launch_menu.hpp:43:6:virtual void MissionsMenu::DataUpdate(const SystemData*)	2
+../Core/Inc/layouts/mission_launch_menu.hpp:51:6:virtual void MissionsMenu::CursorUp()	2
+../Core/Inc/layouts/mission_launch_menu.hpp:58:6:virtual void MissionsMenu::CursorDown()	2
+../Core/Inc/layouts/mission_launch_menu.hpp:65:5:virtual int MissionsMenu::Enter()	1
+../Core/Inc/layouts/mission_launch_menu.hpp:70:6:void MissionsMenu::Cancel()	1
+../Core/Inc/layouts/mission_launch_menu.hpp:74:6:virtual void MissionsMenu::DrawCursor()	1
+../Core/Inc/layouts/mission_launch_menu.hpp:80:6:virtual void MissionsMenu::Draw()	2
+../Core/Src/main.cpp:95:6:void ParseData(const char*)	13
+../Core/Src/main.cpp:157:5:int main()	16
+../Core/Src/main.cpp:301:6:void SystemClock_Config()	3
+../Core/Src/main.cpp:341:13:void MX_I2C1_Init()	2
+../Core/Src/main.cpp:375:13:void MX_USART1_UART_Init()	2
+../Core/Src/main.cpp:408:13:void MX_GPIO_Init()	1
+../Core/Src/main.cpp:444:6:void HAL_UART_RxCpltCallback(UART_HandleTypeDef*)	5
+../Core/Src/main.cpp:469:6:void Error_Handler()	1
+../Core/Inc/layouts/mission_launch_menu.hpp:17:7:MissionsMenu::~MissionsMenu()	1
+../Core/Inc/layouts/mission_launch_menu.hpp:17:7:virtual MissionsMenu::~MissionsMenu()	1
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:19:7:VmaMenu::~VmaMenu()	1
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:19:7:virtual VmaMenu::~VmaMenu()	1
 ../Core/Inc/layouts/diagnostics_menu.hpp:18:7:DiagnosticsMenu::~DiagnosticsMenu()	1
 ../Core/Inc/layouts/diagnostics_menu.hpp:18:7:virtual DiagnosticsMenu::~DiagnosticsMenu()	1
-../Core/Inc/layouts/main_menu.hpp:45:7:MainMenu::~MainMenu()	1
-../Core/Inc/layouts/main_menu.hpp:45:7:virtual MainMenu::~MainMenu()	1
+../Core/Inc/layouts/main_menu.hpp:47:7:MainMenu::~MainMenu()	1
+../Core/Inc/layouts/main_menu.hpp:47:7:virtual MainMenu::~MainMenu()	1

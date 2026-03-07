@@ -28,7 +28,8 @@ Core/Src/main.o: ../Core/Src/main.cpp \
  ../Core/Inc/ssd1306_conf.h ../Core/Inc/ssd1306_fonts.h \
  ../Core/Inc/ssd1306.h ../Core/Inc/ssd1306_tests.h \
  ../Core/Inc/layouts/diagnostics_menu.hpp \
- ../Core/Inc/layouts/vma_revolutions_menu.hpp
+ ../Core/Inc/layouts/vma_revolutions_menu.hpp \
+ ../Core/Inc/layouts/mission_launch_menu.hpp
 ../Core/Inc/layouts/bottom_stroke.hpp:
 ../Core/Inc/layouts/main_menu.hpp:
 ../Core/Inc/main.h:
@@ -64,3 +65,4 @@ Core/Src/main.o: ../Core/Src/main.cpp \
 ../Core/Inc/ssd1306_tests.h:
 ../Core/Inc/layouts/diagnostics_menu.hpp:
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:
+../Core/Inc/layouts/mission_launch_menu.hpp:

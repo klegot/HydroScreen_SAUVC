@@ -11,7 +11,7 @@
 #include <ssd1306_tests.h>
 #include <ssd1306_tests.h>
 
-
+#define MISSION_COUNT 5
 
 #ifndef INC_MAIN_MENU_HPP_
 #define INC_MAIN_MENU_HPP_
@@ -23,6 +23,7 @@ typedef struct {
     bool light_status;       // 0 или 1
     char batL_voltage[16];     // например 12.5
     char batR_voltage[16];     // например 11.8
+    char new_mission_names[MISSION_COUNT][15];
 } SystemData;
 
 class BaseMenu {
@@ -30,7 +31,8 @@ class BaseMenu {
 	enum MenuType {
 		        MAIN_MENU,
 		        DIAGNOSTICS_MENU,
-				VMA_REV_MENU
+				VMA_REV_MENU,
+				MISSIONS_MENU
 		    };
       virtual void Draw() = 0;
       virtual void CursorUp() = 0;

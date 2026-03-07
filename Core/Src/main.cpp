@@ -21,6 +21,8 @@
 #include <layouts/main_menu.hpp>
 #include <layouts/diagnostics_menu.hpp>
 #include <layouts/vma_revolutions_menu.hpp>
+#include <layouts/mission_launch_menu.hpp>
+
 
 
 #include "main.h"
@@ -72,7 +74,8 @@ SystemData system_data = {
                      "---", "---", "---", "---", "---"},
     .light_status = false,
     .batL_voltage = "?",
-    .batR_voltage = "?"
+    .batR_voltage = "?",
+    .new_mission_names = {"--no name--", "--no name--", "--no name--", "--no name--", "--no name--"}
 };
 /* USER CODE END PV */
 
@@ -232,7 +235,10 @@ int main(void)
 		  {
 			  if (current_window->Enter() == 1)
 			  {
-
+				  delete current_window;
+				  current_window = new MissionsMenu();
+				  current_window->DataUpdate(&system_data);
+				  current_window->Draw();
 			  }
 			  if (current_window->Enter() == 2)
 			  {
