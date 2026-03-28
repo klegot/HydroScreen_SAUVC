@@ -128,7 +128,6 @@ void ParseData(const char* data)
     if(token)
     {
         strncpy(system_data.batL_voltage, token, sizeof(system_data.batL_voltage) - 1);
-        //system_data.batL_voltage[sizeof(system_data.batL_voltage) - 1] = '\0';
     }
 
     // 4. Напряжение BatR
@@ -136,7 +135,7 @@ void ParseData(const char* data)
     if(token)
     {
     	int len = strlen(token);
-    	for(int i = 0; i < len; i++) // проверка на наличие /n/r
+    	for(int i = 0; i < len; i++)
     	{
     	    if(token[i] == '\n' || token[i] == '\r')
     	    {
@@ -144,7 +143,6 @@ void ParseData(const char* data)
     	    }
     	}
         strncpy(system_data.batR_voltage, token, sizeof(system_data.batR_voltage) - 1);
-        //system_data.batR_voltage[sizeof(system_data.batR_voltage) - 1] = '\0';
     }
 }
 
@@ -184,10 +182,9 @@ int main(void)
   ssd1306_Init();
   HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_RESET);
   HAL_UART_Receive_IT(&huart1, &uart_rx_byte, 1);
+
   BottomSTR bottom_str;
   bottom_str.Draw();
-
-
 
   BaseMenu* current_window = nullptr;
   current_window = new MainMenu();
@@ -204,7 +201,6 @@ int main(void)
 	  if(rx_flag)
 	      {
 		  	  rx_flag = false;
-
 		      // ЭХО
 		      HAL_GPIO_WritePin(GPIOA, GPIO_PIN_8, GPIO_PIN_SET);
 		      HAL_Delay(2);
@@ -221,8 +217,8 @@ int main(void)
 		      current_window->DataUpdate(&system_data);
 		      current_window->Draw();
 
-		      //bottom_str.DataUpdate(&system_data);
-		      //bottom_str.Draw();
+		      bottom_str.DataUpdate(&system_data);
+		      bottom_str.Draw();
 	      }
 	  if(!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)) // вниз
 	  {

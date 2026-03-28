@@ -9,21 +9,16 @@
 #include <ssd1306_conf.h>
 #include <ssd1306_fonts.h>
 #include <ssd1306_tests.h>
-#include <ssd1306_tests.h>
-
-#define MISSION_COUNT 5
 
 #ifndef INC_MAIN_MENU_HPP_
 #define INC_MAIN_MENU_HPP_
-
-#define count_way 3
 
 typedef struct {
     char new_vma_statuses[10][4];  // "OK" или "ERR"
     bool light_status;       // 0 или 1
     char batL_voltage[16];     // например 12.5
     char batR_voltage[16];     // например 11.8
-    char new_mission_names[MISSION_COUNT][15];
+    char new_mission_names[10][15];
 } SystemData;
 
 class BaseMenu {
@@ -46,6 +41,8 @@ class BaseMenu {
 
 class MainMenu : public BaseMenu
 {
+private:
+	static constexpr uint8_t MENU_ITEMS_COUNT = 3;
 public:
 	uint8_t Y_curs;
 	void Draw() override ;
@@ -63,7 +60,7 @@ public:
 
 void MainMenu::CursorUp()
 {
-	if (Y_curs < count_way - 1) Y_curs++;
+	if (Y_curs < MENU_ITEMS_COUNT - 1) Y_curs++;
 	else Y_curs = 0;
 	MainMenu::Draw();
 }
@@ -71,7 +68,7 @@ void MainMenu::CursorUp()
 void MainMenu::CursorDown()
 {
 	if (Y_curs > 0) Y_curs--;
-	else Y_curs = count_way - 1;
+	else Y_curs = MENU_ITEMS_COUNT - 1;
 	MainMenu::Draw();
 }
 

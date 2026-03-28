@@ -14,6 +14,7 @@
 #include <stdbool.h>
 #include <string.h>
 #include <stdio.h>
+#include <cstdlib>
 
 class DiagnosticsMenu : public BaseMenu
 {
@@ -27,7 +28,6 @@ public:
 	void CursorDown() override;
 	void DrawCursor() override;
 	int Enter() override;
-	void Cancel();
 	void DataUpdate(const SystemData* system_data) override;
 	MenuType GetType() const override {return DIAGNOSTICS_MENU;}
 
@@ -43,10 +43,29 @@ public:
 
 void DiagnosticsMenu::DataUpdate(const SystemData* system_data)
 {
-	strncpy(this->batL_voltage, system_data->batL_voltage, sizeof(this->batL_voltage) - 1);
+	int batL_scale = std::atoi(system_data->batL_voltage);
+	if ((batL_scale == 0 && strcmp(system_data->batL_voltage, "0") != 0) || strlen(system_data->batL_voltage) == 0)
+	    {
+	        strcpy(batL_voltage, "err");
+	    }
+	else
+	    {
+	    int integer_batL_voltage = batL_scale / 100;
+	    int fractional_batL_voltage = batL_scale % 100;
+	    sprintf(batL_voltage, "%d.%02d", integer_batL_voltage, fractional_batL_voltage);
+	    }
 
-	strncpy(this->batR_voltage, system_data->batR_voltage, sizeof(this->batR_voltage) - 1);
-
+	int batR_scale = std::atoi(system_data->batR_voltage);
+	if ((batR_scale == 0 && strcmp(system_data->batR_voltage, "0") != 0) || strlen(system_data->batR_voltage) == 0)
+	    {
+	    strcpy(batR_voltage, "err");
+	    }
+	else
+	    {
+	    int integer_batR_voltage = batR_scale / 100;
+	    int fractional_batR_voltage = batR_scale % 100;
+	    sprintf(batR_voltage, "%d.%02d", integer_batR_voltage, fractional_batR_voltage);
+	    } // TODO вынести это в отдельный метод
 	light_status = system_data->light_status;
 }
 
@@ -69,11 +88,6 @@ int DiagnosticsMenu::Enter()
 	return 1;
 }
 
-void DiagnosticsMenu::Cancel()
-{
-
-}
-
 void DiagnosticsMenu::DrawCursor()
 {
 	ssd1306_SetCursor(0, Y_curs * 12);
@@ -94,14 +108,12 @@ void DiagnosticsMenu::Draw()
 	ssd1306_SetCursor(10, 24);
 	ssd1306_WriteString("BatL", Font_7x10, White);
 	ssd1306_SetCursor(60, 24);
-	strcpy(voltage_buffer, batL_voltage);
-	strcat(voltage_buffer, " V");
+	snprintf(voltage_buffer, sizeof(voltage_buffer), "%s V", batL_voltage);
 	ssd1306_WriteString(voltage_buffer, Font_7x10, White);
 	ssd1306_SetCursor(10, 36);
 	ssd1306_WriteString("BatR", Font_7x10, White);
 	ssd1306_SetCursor(60, 36);
-	strcpy(voltage_buffer, batR_voltage);
-	strcat(voltage_buffer, " V");
+	snprintf(voltage_buffer, sizeof(voltage_buffer), "%s V", batR_voltage);
 	ssd1306_WriteString(voltage_buffer, Font_7x10, White);
 	DiagnosticsMenu::DrawCursor();
 }

@@ -19,9 +19,9 @@
 class VmaMenu : public BaseMenu
 {
 private:
-
-	char vma_numbers[10][4];
-	char vma_statuses[10][4];
+    static constexpr uint8_t VMA_COUNT = 10;
+	char vma_numbers[VMA_COUNT][4];
+	char vma_statuses[VMA_COUNT][10];
 
 public:
 
@@ -30,7 +30,6 @@ public:
 	void CursorDown() override;
 	void DrawCursor() override;
 	int Enter() override;
-	void Cancel();
 	void DataUpdate(const SystemData* system_data) override;
 	MenuType GetType() const override {return VMA_REV_MENU;}
 
@@ -65,10 +64,6 @@ void VmaMenu::CursorDown()
 int VmaMenu::Enter()
 {
 	return 1;
-}
-
-void VmaMenu::Cancel()
-{
 }
 
 void VmaMenu::DrawCursor()
