@@ -1,21 +1,21 @@
 /* USER CODE BEGIN Header */
 /**
-  ******************************************************************************
-  * @file           : main.h
-  * @brief          : Header for main.c file.
-  *                   This file contains the common defines of the application.
-  ******************************************************************************
-  * @attention
-  *
-  * Copyright (c) 2025 STMicroelectronics.
-  * All rights reserved.
-  *
-  * This software is licensed under terms that can be found in the LICENSE file
-  * in the root directory of this software component.
-  * If no LICENSE file comes with this software, it is provided AS-IS.
-  *
-  ******************************************************************************
-  */
+ ******************************************************************************
+ * @file           : main.h
+ * @brief          : Header for main.c file.
+ *                   This file contains the common defines of the application.
+ ******************************************************************************
+ * @attention
+ *
+ * Copyright (c) 2025 STMicroelectronics.
+ * All rights reserved.
+ *
+ * This software is licensed under terms that can be found in the LICENSE file
+ * in the root directory of this software component.
+ * If no LICENSE file comes with this software, it is provided AS-IS.
+ *
+ ******************************************************************************
+ */
 /* USER CODE END Header */
 
 /* Define to prevent recursive inclusion -------------------------------------*/
@@ -23,7 +23,8 @@
 #define __MAIN_H
 
 #ifdef __cplusplus
-extern "C" {
+extern "C"
+{
 #endif
 
 /* Includes ------------------------------------------------------------------*/
@@ -31,36 +32,47 @@ extern "C" {
 
 /* Private includes ----------------------------------------------------------*/
 /* USER CODE BEGIN Includes */
+#ifndef USART3_BASE
+#define USART3_BASE 0x40004800UL
+#endif
 
-/* USER CODE END Includes */
+#ifndef RCC_APB1ENR_USART3EN
+#define RCC_APB1ENR_USART3EN (1UL << 18)
+#endif
 
-/* Exported types ------------------------------------------------------------*/
-/* USER CODE BEGIN ET */
+#ifndef USART3_IRQn
+#define USART3_IRQn ((IRQn_Type)39) // Явное приведение типа
+#endif
 
-/* USER CODE END ET */
+    /* USER CODE END Includes */
 
-/* Exported constants --------------------------------------------------------*/
-/* USER CODE BEGIN EC */
+    /* Exported types ------------------------------------------------------------*/
+    /* USER CODE BEGIN ET */
 
-/* USER CODE END EC */
+    /* USER CODE END ET */
 
-/* Exported macro ------------------------------------------------------------*/
-/* USER CODE BEGIN EM */
+    /* Exported constants --------------------------------------------------------*/
+    /* USER CODE BEGIN EC */
 
-/* USER CODE END EM */
+    /* USER CODE END EC */
 
-/* Exported functions prototypes ---------------------------------------------*/
-void Error_Handler(void);
+    /* Exported macro ------------------------------------------------------------*/
+    /* USER CODE BEGIN EM */
 
-/* USER CODE BEGIN EFP */
+    /* USER CODE END EM */
 
-/* USER CODE END EFP */
+    /* Exported functions prototypes ---------------------------------------------*/
+    void Error_Handler(void);
 
-/* Private defines -----------------------------------------------------------*/
+    /* USER CODE BEGIN EFP */
 
-/* USER CODE BEGIN Private defines */
+    /* USER CODE END EFP */
 
-/* USER CODE END Private defines */
+    /* Private defines -----------------------------------------------------------*/
+
+    /* USER CODE BEGIN Private defines */
+
+    /* USER CODE END Private defines */
 
 #ifdef __cplusplus
 }
