@@ -1,99 +1,103 @@
-/*
- * bottom_stroke.hpp
- *
- *  Created on: Dec 16, 2025
- *      Author: andrey
- */
+#ifdef __cplusplus
+extern "C"
+{
+#endif
 
-#include <layouts/main_menu.hpp>
-
-
-#include <stdbool.h>
-#include <string.h>
-#include <stdio.h>
 #include <cstdlib>
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
+
+#ifdef __cplusplus
+}
+#endif
+
+#include "main_menu.hpp"
 
 #ifndef INC_BOTTOM_STROKE_HPP_
 #define INC_BOTTOM_STROKE_HPP_
 
-
 class BottomSTR
 {
-public:
-	uint8_t Y_btm;
-	char batL_voltage[16];
-	char batL_procent[10];
-	char batR_voltage[16];
-	char batR_procent[10];
-	bool status;
-	void Draw();
-	void DataUpdate(const SystemData* system_data);
-	int CalculatePercent(int voltage_str);
+private:
+    void UpdateSingleBattery(const int8_t *raw_data, char *out_v, char *out_p);
 
-	BottomSTR()
-	{
-		strcpy(batL_voltage, "?");
-	    strcpy(batR_voltage, "?");
-	    strcpy(batL_procent, "-%");
-	    strcpy(batR_procent, "-%");
-		status = true;
-		Y_btm = 55;
-	}
+public:
+    uint8_t Y_btm;
+    char batL_voltage[16];
+    char batL_procent[10];
+    char batR_voltage[16];
+    char batR_procent[10];
+    bool status;
+    void Draw();
+    void DataUpdate(const SystemData *system_data);
+    int CalculatePercent(int voltage_str);
+
+    BottomSTR()
+    {
+        strcpy(batL_voltage, "?");
+        strcpy(batR_voltage, "?");
+        strcpy(batL_procent, "-%");
+        strcpy(batR_procent, "-%");
+        status = true;
+        Y_btm = 55;
+    }
 };
 
 int BottomSTR::CalculatePercent(int voltage_scale)
 {
-    const int MIN_VOLTAGE = 0;  // полностью разряжен
-    const int MAX_VOLTAGE = 17 * 100;  // полностью заряжен
+    const int MIN_VOLTAGE = 0;        // полностью разряжен
+    const int MAX_VOLTAGE = 17 * 100; // полностью заряжен
 
-    if (voltage_scale < MIN_VOLTAGE) voltage_scale = MIN_VOLTAGE;
-    if (voltage_scale > MAX_VOLTAGE) voltage_scale = MAX_VOLTAGE;
+    if (voltage_scale < MIN_VOLTAGE)
+        voltage_scale = MIN_VOLTAGE;
+    if (voltage_scale > MAX_VOLTAGE)
+        voltage_scale = MAX_VOLTAGE;
 
     int percent = static_cast<int>((voltage_scale * 100) / (MAX_VOLTAGE - MIN_VOLTAGE));
 
     return percent;
 }
 
-void BottomSTR::DataUpdate(const SystemData* system_data)
+void BottomSTR::UpdateSingleBattery(const int8_t *raw_data, char *out_v, char *out_p)
 {
-    int batL_scale = std::atoi(system_data->batL_voltage);
-    if ((batL_scale == 0 && strcmp(system_data->batL_voltage, "0") != 0) ||
-        strlen(system_data->batL_voltage) == 0)
-    {
-        strcpy(batL_voltage, "err");
-        strcpy(batL_procent, "-%");
-    }
-    else
-    {
-    	int integer_batL_voltage = batL_scale / 100;
-    	int fractional_batL_voltage = batL_scale % 100;
-    	sprintf(batL_voltage, "%d.%02d", integer_batL_voltage, fractional_batL_voltage);
-        int percentL = CalculatePercent(batL_scale);
-        snprintf(batL_procent, sizeof(batL_procent), "%d%%", percentL);
-    }
+    // atoi корректно работает, если в строке "1250" (что значит 12.50V)
+    int scale = std::atoi((const char *)raw_data);
 
-    int batR_scale = std::atoi(system_data->batR_voltage);
-    if ((batR_scale == 0 && strcmp(system_data->batR_voltage, "0") != 0) ||
-        strlen(system_data->batR_voltage) == 0)
-        {
-            strcpy(batR_voltage, "err");
-            strcpy(batR_procent, "-%");
-        }
+    // Проверка на пустую строку или ошибку парсинга
+    if (scale == 0 && raw_data[0] != '0')
+    {
+        strcpy(out_v, "err");
+        strcpy(out_p, "-%");
+    }
     else
     {
-    	int integer_batR_voltage = batR_scale / 100;
-    	int fractional_batR_voltage = batR_scale % 100;
-    	sprintf(batR_voltage, "%d.%02d", integer_batR_voltage, fractional_batR_voltage);
-        int percentR = CalculatePercent(batR_scale);
-        snprintf(batR_procent, sizeof(batR_procent), "%d%%", percentR);
-    } // TODO убрать это в отдельный метод
+        // Формируем строку напряжения (например, "12.50")
+        snprintf(out_v, 16, "%d.%02d", scale / 100, scale % 100);
+
+        // Считаем и формируем проценты
+        int percent = CalculatePercent(scale);
+        snprintf(out_p, 10, "%d%%", percent);
+    }
+}
+
+void BottomSTR::DataUpdate(const SystemData *system_data)
+{
+    if (!system_data)
+        return;
+
+    UpdateSingleBattery(system_data->batL_voltage, this->batL_voltage, this->batL_procent);
+    UpdateSingleBattery(system_data->batR_voltage, this->batR_voltage, this->batR_procent);
+    // this->status = true;
 }
 
 void BottomSTR::Draw()
 {
     ssd1306_SetCursor(3, Y_btm);
-    if (status) ssd1306_WriteString("OK", Font_6x8, White);
-    else ssd1306_WriteString("ERROR", Font_6x8, White);
+    if (status)
+        ssd1306_WriteString("OK", Font_6x8, White);
+    else
+        ssd1306_WriteString("ERROR", Font_6x8, White);
 
     ssd1306_SetCursor(30, Y_btm);
     ssd1306_WriteString("BatL", Font_6x8, White);

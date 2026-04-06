@@ -41,7 +41,7 @@ extern "C"
 #endif
 
 #ifndef USART3_IRQn
-#define USART3_IRQn ((IRQn_Type)39) // Явное приведение типа
+#define USART3_IRQn ((IRQn_Type)39)
 #endif
 
     /* USER CODE END Includes */

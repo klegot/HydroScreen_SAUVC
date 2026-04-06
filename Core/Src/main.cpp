@@ -1,28 +1,4 @@
-/* USER CODE BEGIN Header */
-/**
- ******************************************************************************
- * @file           : main.c
- * @brief          : Main program body
- ******************************************************************************
- * @attention
- *
- * Copyright (c) 2025 STMicroelectronics.
- * All rights reserved.
- *
- * This software is licensed under terms that can be found in the LICENSE file
- * in the root directory of this software component.
- * If no LICENSE file comes with this software, it is provided AS-IS.
- *
- ******************************************************************************
- */
-/* USER CODE END Header */
-/* Includes ------------------------------------------------------------------*/
-
-#include <layouts/bottom_stroke.hpp>
-#include <layouts/diagnostics_menu.hpp>
-#include <layouts/main_menu.hpp>
-#include <layouts/mission_launch_menu.hpp>
-#include <layouts/vma_revolutions_menu.hpp>
+// Made by klegot
 
 #ifdef __cplusplus
 extern "C"
@@ -30,6 +6,14 @@ extern "C"
 #endif
 
 #include "main.h"
+#include "ssd1306.h"
+#include "ssd1306_conf.h"
+#include "ssd1306_fonts.h"
+#include "ssd1306_tests.h"
+
+#include <stdbool.h>
+#include <stdio.h>
+#include <string.h>
 
 #ifdef __cplusplus
 }
@@ -39,32 +23,12 @@ extern "C"
 #include "hydrolib_bus_datalink_stream.hpp"
 #include "hydrv_gpio_low.hpp"
 #include "hydrv_rs_485.hpp"
-
-#include "ssd1306.h"
-#include "ssd1306_conf.h"
-#include "ssd1306_tests.h"
-
-#include "ssd1306_fonts.h"
-
-#include "ssd1306_tests.h"
-
-#include <stdbool.h>
-#include <stdio.h>
-#include <string.h>
-/* USER CODE END Includes */
-
-/* Private typedef -----------------------------------------------------------*/
-/* USER CODE BEGIN PTD */
-
-/* USER CODE END PTD */
-
-/* Private define ------------------------------------------------------------*/
-/* USER CODE BEGIN PD */
-
-/* USER CODE END PD */
-
-/* Private macro -------------------------------------------------------------*/
-/* USER CODE BEGIN PM */
+#include "layouts/bottom_stroke.hpp"
+#include "layouts/diagnostics_menu.hpp"
+#include "layouts/main_menu.hpp"
+#include "layouts/mission_launch_menu.hpp"
+#include "layouts/vma_revolutions_menu.hpp"
+#include "memory.hpp"
 
 #define BUFFER_LENGTH 5
 constinit hydrv::GPIO::GPIOLow rx_pin(hydrv::GPIO::GPIOLow::GPIOA_port, 10, hydrv::GPIO::GPIOLow::GPIO_UART_RX);
@@ -86,14 +50,8 @@ Logger loger;
 hydrolib::bus::datalink::StreamManager manager(1, RS, loger);
 hydrolib::bus::datalink::Stream stream(manager, 2);
 hydrolib::bus::application::Master master(stream, loger);
-/* USER CODE END PM */
 
-/* Private variables ---------------------------------------------------------*/
 I2C_HandleTypeDef hi2c1;
-
-/* USER CODE BEGIN PV */
-uint8_t lenght = 128;
-uint8_t wight = 64;
 
 SystemData system_data = {
     .new_vma_statuses = {"---", "---", "---", "---", "---", "---", "---", "---", "---", "---"},
@@ -101,107 +59,20 @@ SystemData system_data = {
     .batL_voltage = "?",
     .batR_voltage = "?",
     .new_mission_names = {"--no name--", "--no name--", "--no name--", "--no name--", "--no name--"}};
-/* USER CODE END PV */
 
-/* Private function prototypes -----------------------------------------------*/
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
-/* USER CODE BEGIN PFP */
 
-/* USER CODE END PFP */
-
-/* Private user code ---------------------------------------------------------*/
-/* USER CODE BEGIN 0 */
-
-// парсинг для формата: 1110001110,1,12.5,11.8
-void ParseData(const char *data)
-{
-    char temp[64];
-    strncpy(temp, data, sizeof(temp) - 1);
-    temp[sizeof(temp) - 1] = '\0';
-
-    // Разбиваем строку на токены
-    char *token = strtok(temp, ",");
-
-    // 1. VMA статусы (10 символов)
-    if (token && strlen(token) >= 10)
-    {
-        for (int i = 0; i < 10; i++)
-        {
-            if (token[i] == '1')
-                strcpy(system_data.new_vma_statuses[i], "OK");
-            else if (token[i] == '0')
-                strcpy(system_data.new_vma_statuses[i], "ERR");
-            else
-                strcpy(system_data.new_vma_statuses[i], "---");
-        }
-    }
-
-    // 2. Статус света
-    token = strtok(NULL, ",");
-    if (token)
-    {
-        if (token[0] == '1')
-            system_data.light_status = true;
-        else
-            system_data.light_status = false;
-    }
-
-    // 3. Напряжение BatL
-    token = strtok(NULL, ",");
-    if (token)
-    {
-        strncpy(system_data.batL_voltage, token, sizeof(system_data.batL_voltage) - 1);
-    }
-
-    // 4. Напряжение BatR
-    token = strtok(NULL, ",");
-    if (token)
-    {
-        int len = strlen(token);
-        for (int i = 0; i < len; i++)
-        {
-            if (token[i] == '\n' || token[i] == '\r')
-            {
-                token[i] = '\0';
-            }
-        }
-        strncpy(system_data.batR_voltage, token, sizeof(system_data.batR_voltage) - 1);
-    }
-}
-
-/* USER CODE END 0 */
-
-/**
- * @brief  The application entry point.
- * @retval int
- */
 int main(void)
 {
-
-    /* USER CODE BEGIN 1 */
-    /* USER CODE END 1 */
-
-    /* MCU Configuration--------------------------------------------------------*/
-
-    /* Reset of all peripherals, Initializes the Flash interface and the Systick. */
     HAL_Init();
 
-    /* USER CODE BEGIN Init */
-    /* USER CODE END Init */
-
-    /* Configure the system clock */
     SystemClock_Config();
 
-    /* USER CODE BEGIN SysInit */
-
-    /* USER CODE END SysInit */
-
-    /* Initialize all configured peripherals */
     MX_GPIO_Init();
     MX_I2C1_Init();
-    /* USER CODE BEGIN 2 */
+
     ssd1306_Init();
 
     BottomSTR bottom_str;
@@ -212,22 +83,25 @@ int main(void)
     current_window->Draw();
 
     RS.Init();
-
     uint8_t buffer[BUFFER_LENGTH];
 
-    /* USER CODE END 2 */
+    uint32_t last_send_time = 0;
+    const uint32_t send_interval = 5000;
 
-    /* Infinite loop */
-    /* USER CODE BEGIN WHILE */
     while (1)
     {
+        manager.Process();
+        bottom_str.Draw();
         unsigned rx_length = RS.GetRxLength();
         if (rx_length >= 5)
         {
             RS.Read(buffer, BUFFER_LENGTH);
             RS.Transmit(buffer, BUFFER_LENGTH);
         }
-        bottom_str.Draw();
+
+        /*if (HAL_GetTick() - last_send_time >= send_interval)
+        {
+        }*/
 
         if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)) // вниз
         {
@@ -287,18 +161,9 @@ int main(void)
             HAL_Delay(100);
         }
         ssd1306_UpdateScreen();
-
-        /* USER CODE END WHILE */
-
-        /* USER CODE BEGIN 3 */
     }
-    /* USER CODE END 3 */
 }
 
-/**
- * @brief System Clock Configuration
- * @retval None
- */
 void SystemClock_Config(void)
 {
     RCC_OscInitTypeDef RCC_OscInitStruct = {0};
@@ -333,21 +198,8 @@ void SystemClock_Config(void)
     }
 }
 
-/**
- * @brief I2C1 Initialization Function
- * @param None
- * @retval None
- */
 static void MX_I2C1_Init(void)
 {
-
-    /* USER CODE BEGIN I2C1_Init 0 */
-
-    /* USER CODE END I2C1_Init 0 */
-
-    /* USER CODE BEGIN I2C1_Init 1 */
-
-    /* USER CODE END I2C1_Init 1 */
     hi2c1.Instance = I2C1;
     hi2c1.Init.ClockSpeed = 100000;
     hi2c1.Init.DutyCycle = I2C_DUTYCYCLE_2;
@@ -361,22 +213,11 @@ static void MX_I2C1_Init(void)
     {
         Error_Handler();
     }
-    /* USER CODE BEGIN I2C1_Init 2 */
-
-    /* USER CODE END I2C1_Init 2 */
 }
 
-/**
- * @brief GPIO Initialization Function
- * @param None
- * @retval None
- */
 static void MX_GPIO_Init(void)
 {
     GPIO_InitTypeDef GPIO_InitStruct = {0};
-    /* USER CODE BEGIN MX_GPIO_Init_1 */
-
-    /* USER CODE END MX_GPIO_Init_1 */
 
     /* GPIO Ports Clock Enable */
     __HAL_RCC_GPIOD_CLK_ENABLE();
@@ -389,35 +230,17 @@ static void MX_GPIO_Init(void)
     GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
     GPIO_InitStruct.Pull = GPIO_NOPULL;
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
-
-    /* USER CODE BEGIN MX_GPIO_Init_2 */
-
-    /* USER CODE END MX_GPIO_Init_2 */
 }
 
-/* USER CODE BEGIN 4 */
-
-/* USER CODE END 4 */
-
-/**
- * @brief  This function is executed in case of error occurrence.
- * @retval None
- */
-// Вне любых функций, в глобальной области
-extern "C" void RS485_IRQHandler(void)
-{
-    RS.IRQCallback(); // Обязательно со скобками!
-}
+extern "C" void RS485_IRQHandler(void) { RS.IRQCallback(); }
 
 void Error_Handler(void)
 {
-    /* USER CODE BEGIN Error_Handler_Debug */
     /* User can add his own implementation to report the HAL error return state */
     __disable_irq();
     while (1)
     {
     }
-    /* USER CODE END Error_Handler_Debug */
 }
 #ifdef USE_FULL_ASSERT
 /**
@@ -429,9 +252,7 @@ void Error_Handler(void)
  */
 void assert_failed(uint8_t *file, uint32_t line)
 {
-    /* USER CODE BEGIN 6 */
     /* User can add his own implementation to report the file name and line number,
        ex: printf("Wrong parameters value: file %s on line %d\r\n", file, line) */
-    /* USER CODE END 6 */
 }
 #endif /* USE_FULL_ASSERT */
