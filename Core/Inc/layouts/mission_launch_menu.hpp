@@ -45,7 +45,7 @@ void MissionsMenu::DataUpdate(const SystemData *system_data)
 {
     for (int i = 0; i < MAX_MISSIONS; i++)
     {
-        strncpy(this->mission_names[i], (char *)system_data->new_mission_names[i], 16);
+        strncpy(this->mission_names[i], (char *)system_data->mission_names[i], 16);
         this->mission_names[i][15] = '\0';
     }
 }

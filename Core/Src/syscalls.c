@@ -30,6 +30,15 @@
 #include <sys/time.h>
 #include <sys/times.h>
 
+int _gettimeofday(struct timeval *tv, void *tzvp) {
+    extern int HAL_GetTick(void); 
+    if (tv) {
+        int ticks = HAL_GetTick();
+        tv->tv_sec = ticks / 1000;
+        tv->tv_usec = (ticks % 1000) * 1000;
+    }
+    return 0;
+}
 
 /* Variables */
 extern int __io_putchar(int ch) __attribute__((weak));

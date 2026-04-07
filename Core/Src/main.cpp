@@ -1,5 +1,6 @@
 // Made by klegot
 
+#include <cstddef>
 #ifdef __cplusplus
 extern "C"
 {
@@ -51,14 +52,17 @@ hydrolib::bus::datalink::StreamManager manager(1, RS, loger);
 hydrolib::bus::datalink::Stream stream(manager, 2);
 hydrolib::bus::application::Master master(stream, loger);
 
+constinit uint8_t SLAVE_DATA_REGISTR = 0;
+
 I2C_HandleTypeDef hi2c1;
 
-SystemData system_data = {
-    .new_vma_statuses = {"---", "---", "---", "---", "---", "---", "---", "---", "---", "---"},
-    .light_status = false,
-    .batL_voltage = "?",
-    .batR_voltage = "?",
-    .new_mission_names = {"--no name--", "--no name--", "--no name--", "--no name--", "--no name--"}};
+SystemData system_data = {.new_vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // -1 для "---"
+                          .light_status = 0,
+                          .current_mission = 0,
+                          .batL_voltage = "?",
+                          .batR_voltage = "?",
+                          .mission_names = {"--no name--", "--no name--", "--no name--", "--no name--", "--no name--"},
+                          .error_logs = {"--no logs--", "", "", "", ""}};
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -83,7 +87,8 @@ int main(void)
     current_window->Draw();
 
     RS.Init();
-    uint8_t buffer[BUFFER_LENGTH];
+    // uint8_t buffer[BUFFER_LENGTH];
+    //  const char testing_transmit[] = "hello";
 
     uint32_t last_send_time = 0;
     const uint32_t send_interval = 5000;
@@ -92,16 +97,27 @@ int main(void)
     {
         manager.Process();
         bottom_str.Draw();
-        unsigned rx_length = RS.GetRxLength();
+        /*unsigned rx_length = RS.GetRxLength();
         if (rx_length >= 5)
         {
             RS.Read(buffer, BUFFER_LENGTH);
             RS.Transmit(buffer, BUFFER_LENGTH);
-        }
-
-        /*if (HAL_GetTick() - last_send_time >= send_interval)
-        {
         }*/
+
+        if (HAL_GetTick() - last_send_time >= send_interval)
+        {
+            // RS.Transmit((uint8_t *)testing_transmit, strlen(testing_transmit) + 1);
+            SystemData temp_data = {};
+            master.Read(&temp_data, SLAVE_DATA_REGISTR, sizeof(SystemData));
+            if (master.Process() == hydrolib::ReturnCode::OK &&
+                std::memcmp(&system_data, &temp_data, sizeof(SystemData)) != 0)
+            {
+                system_data = temp_data;
+                current_window->DataUpdate(&system_data);
+                bottom_str.DataUpdate(&system_data);
+            }
+            last_send_time = HAL_GetTick();
+        }
 
         if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)) // вниз
         {
@@ -119,14 +135,14 @@ int main(void)
                     current_window->DataUpdate(&system_data);
                     current_window->Draw();
                 }
-                if (current_window->Enter() == 2)
+                else if (current_window->Enter() == 2)
                 {
                     delete current_window;
                     current_window = new DiagnosticsMenu();
                     current_window->DataUpdate(&system_data);
                     current_window->Draw();
                 }
-                if (current_window->Enter() == 3)
+                else if (current_window->Enter() == 3)
                 {
                 }
             }
@@ -135,6 +151,15 @@ int main(void)
                 delete current_window;
                 current_window = new VmaMenu();
                 current_window->DataUpdate(&system_data);
+                current_window->Draw();
+            }
+            else if (current_window->GetType() == BaseMenu::MISSIONS_MENU)
+            {
+                // system_data.current_mission = current_window->Enter();
+                system_data.current_mission = 4;
+                master.Write(static_cast<void *>(&system_data.current_mission), offsetof(SystemData, current_mission),
+                             sizeof(system_data.current_mission));
+                master.Process();
                 current_window->Draw();
             }
 

@@ -53,8 +53,18 @@ void VmaMenu::DataUpdate(const SystemData *system_data)
 
     for (int i = 0; i < VMA_COUNT; i++)
     {
-        strncpy(this->vma_statuses[i], (const char *)system_data->new_vma_statuses[i], 4);
-        this->vma_statuses[i][3] = '\0';
+        if (system_data->new_vma_statuses[i] == 1)
+        {
+            strcpy(this->vma_statuses[i], "OK");
+        }
+        else if (system_data->new_vma_statuses[i] == 0)
+        {
+            strcpy(this->vma_statuses[i], "ERR");
+        }
+        else
+        {
+            strcpy(this->vma_statuses[i], "---");
+        }
     }
 }
 
