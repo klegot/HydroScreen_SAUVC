@@ -18,7 +18,7 @@ extern "C"
 class MissionsMenu : public BaseMenu
 {
 private:
-    static constexpr uint8_t MAX_MISSIONS = 5;
+    static constexpr uint8_t MAX_MISSIONS = 4;
     char mission_names[MAX_MISSIONS][20];
 
 public:
@@ -72,7 +72,7 @@ int MissionsMenu::Enter() { return Y_curs + 1; }
 
 void MissionsMenu::DrawCursor()
 {
-    ssd1306_SetCursor(0, Y_curs * 12);
+    ssd1306_SetCursor(0, 12 + Y_curs * 10);
     ssd1306_WriteString(">", Font_7x10, White);
 }
 
@@ -86,6 +86,7 @@ void MissionsMenu::Draw()
         ssd1306_SetCursor(10, 12 + i * 10);
         ssd1306_WriteString(mission_names[i], Font_6x8, White);
     }
+    MissionsMenu::DrawCursor();
 }
 
 #endif /* INC_LAYOUTS_MISSION_LAUNCH_MENU_HPP_ */

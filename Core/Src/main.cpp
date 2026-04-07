@@ -61,7 +61,7 @@ SystemData system_data = {.new_vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -
                           .current_mission = 0,
                           .batL_voltage = "?",
                           .batR_voltage = "?",
-                          .mission_names = {"--no name--", "--no name--", "--no name--", "--no name--", "--no name--"},
+                          .mission_names = {"--no name--", "--no name--", "--no name--", "--no name--"},
                           .error_logs = {"--no logs--", "", "", "", ""}};
 
 void SystemClock_Config(void);
@@ -108,14 +108,18 @@ int main(void)
         {
             // RS.Transmit((uint8_t *)testing_transmit, strlen(testing_transmit) + 1);
             SystemData temp_data = {};
-            master.Read(&temp_data, SLAVE_DATA_REGISTR, sizeof(SystemData));
-            if (master.Process() == hydrolib::ReturnCode::OK &&
-                std::memcmp(&system_data, &temp_data, sizeof(SystemData)) != 0)
+            master.Read(&temp_data.batL_voltage, 12, sizeof(temp_data.batL_voltage));
+            master.Process();
+            manager.Process();
+            memcpy(system_data.batL_voltage, temp_data.batL_voltage, sizeof(system_data.batL_voltage));
+            current_window->DataUpdate(&system_data);
+            bottom_str.DataUpdate(&system_data);
+            /*if (std::memcmp(&system_data, &temp_data, sizeof(SystemData)) != 0)
             {
                 system_data = temp_data;
                 current_window->DataUpdate(&system_data);
                 bottom_str.DataUpdate(&system_data);
-            }
+            }*/
             last_send_time = HAL_GetTick();
         }
 
@@ -155,8 +159,7 @@ int main(void)
             }
             else if (current_window->GetType() == BaseMenu::MISSIONS_MENU)
             {
-                // system_data.current_mission = current_window->Enter();
-                system_data.current_mission = 4;
+                system_data.current_mission = current_window->Enter();
                 master.Write(static_cast<void *>(&system_data.current_mission), offsetof(SystemData, current_mission),
                              sizeof(system_data.current_mission));
                 master.Process();
