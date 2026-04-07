@@ -18,11 +18,7 @@
             "configFiles": [
                 "interface/stlink.cfg",
                 "target/stm32f1x.cfg"
-            ],
-            "openOCDPreConfigLaunch": [
-                "adapter serial \"2\\u00a4000002\""
-            ],
-            "gdbPort": 3333
+            ]
         }
     ]
 }

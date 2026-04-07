@@ -20,7 +20,7 @@ extern "C"
 class DiagnosticsMenu : public BaseMenu
 {
 private:
-    void FormatVoltage(const int8_t *raw_data, char *out_v);
+    void FormatVoltage(int16_t raw_data, char *out_v);
 
 public:
     char batL_voltage[16];
@@ -44,19 +44,18 @@ public:
     }
 };
 
-void DiagnosticsMenu::FormatVoltage(const int8_t *raw_data, char *out_v)
+void DiagnosticsMenu::FormatVoltage(int16_t raw_value, char *out_v)
 {
-    int scale = std::atoi((const char *)raw_data);
-
-    // Проверка на ошибку или пустую строку
-    if (scale == 0 && raw_data[0] != '0')
+    // Если используем 0 как признак отсутствия данных
+    if (raw_value <= 0)
     {
-        strcpy(out_v, "err");
+        strcpy(out_v, "?");
     }
     else
     {
-        // Форматируем: 1250 -> "12.50"
-        snprintf(out_v, 16, "%d.%02d", scale / 100, scale % 100);
+        // Форматируем число 1250 -> "12.50"
+        // Делим на 100 для целой части, остаток от деления на 100 для сотых
+        snprintf(out_v, 16, "%d.%02d", raw_value / 100, raw_value % 100);
     }
 }
 
@@ -67,6 +66,7 @@ void DiagnosticsMenu::DataUpdate(const SystemData *system_data)
 
     FormatVoltage(system_data->batL_voltage, this->batL_voltage);
     FormatVoltage(system_data->batR_voltage, this->batR_voltage);
+
     this->light_status = system_data->light_status;
 }
 

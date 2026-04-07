@@ -21,10 +21,10 @@ struct SystemData
     int8_t new_vma_statuses[10]; // 1 = "OK"; 0 = "ERROR"
     int8_t light_status;         // 1 = ON; 0 = OFF
     int8_t current_mission;      // current mision's number
-    int8_t batL_voltage[8];      // 1250 => 12.50
-    int8_t batR_voltage[8];      // 1250 => 12.50
-    int8_t mission_names[4][16]; // <= 5 mission names (length = 16)
-    int8_t error_logs[5][16];    // <= 5 errror logs (length = 16)
+    int16_t batL_voltage;        // 1250 => 12.50
+    int16_t batR_voltage;        // 1250 => 12.50
+    int8_t mission_names[4][16]; // <= 4 mission names (length = 16)
+    int8_t error_logs[4][16];    // <= 4 errror logs (length = 16)
 } __attribute__((__packed__));
 
 #endif

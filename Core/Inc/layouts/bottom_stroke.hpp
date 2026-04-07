@@ -20,7 +20,7 @@ extern "C"
 class BottomSTR
 {
 private:
-    void UpdateSingleBattery(const int8_t *raw_data, char *out_v, char *out_p);
+    void UpdateSingleBattery(int16_t raw_data, char *out_v, char *out_p);
 
 public:
     uint8_t Y_btm;
@@ -59,24 +59,21 @@ int BottomSTR::CalculatePercent(int voltage_scale)
     return percent;
 }
 
-void BottomSTR::UpdateSingleBattery(const int8_t *raw_data, char *out_v, char *out_p)
+void BottomSTR::UpdateSingleBattery(int16_t raw_value, char *out_v, char *out_p)
 {
-    // atoi корректно работает, если в строке "1250" (что значит 12.50V)
-    int scale = std::atoi((const char *)raw_data);
-
-    // Проверка на пустую строку или ошибку парсинга
-    if (scale == 0 && raw_data[0] != '0')
+    // Если значение 0 или отрицательное, считаем, что данных нет
+    if (raw_value <= 0)
     {
-        strcpy(out_v, "err");
+        strcpy(out_v, "?");
         strcpy(out_p, "-%");
     }
     else
     {
-        // Формируем строку напряжения (например, "12.50")
-        snprintf(out_v, 16, "%d.%02d", scale / 100, scale % 100);
+        // Формируем строку напряжения: 1250 -> "12.50"
+        snprintf(out_v, 16, "%d.%02d", raw_value / 100, raw_value % 100);
 
-        // Считаем и формируем проценты
-        int percent = CalculatePercent(scale);
+        // Считаем проценты
+        int percent = CalculatePercent(raw_value);
         snprintf(out_p, 10, "%d%%", percent);
     }
 }
@@ -86,9 +83,9 @@ void BottomSTR::DataUpdate(const SystemData *system_data)
     if (!system_data)
         return;
 
+    // Передаем числа напрямую из структуры
     UpdateSingleBattery(system_data->batL_voltage, this->batL_voltage, this->batL_procent);
     UpdateSingleBattery(system_data->batR_voltage, this->batR_voltage, this->batR_procent);
-    // this->status = true;
 }
 
 void BottomSTR::Draw()

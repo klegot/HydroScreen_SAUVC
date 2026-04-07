@@ -52,17 +52,17 @@ hydrolib::bus::datalink::StreamManager manager(1, RS, loger);
 hydrolib::bus::datalink::Stream stream(manager, 2);
 hydrolib::bus::application::Master master(stream, loger);
 
-constinit uint8_t SLAVE_DATA_REGISTR = 0;
+static constexpr uint8_t SLAVE_DATA_REGISTR = 0;
 
 I2C_HandleTypeDef hi2c1;
 
-SystemData system_data = {.new_vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1}, // -1 для "---"
+SystemData system_data = {.new_vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
                           .light_status = 0,
                           .current_mission = 0,
-                          .batL_voltage = "?",
-                          .batR_voltage = "?",
+                          .batL_voltage = -1,
+                          .batR_voltage = -1,
                           .mission_names = {"--no name--", "--no name--", "--no name--", "--no name--"},
-                          .error_logs = {"--no logs--", "", "", "", ""}};
+                          .error_logs = {"--no logs--", "", "", ""}};
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -95,7 +95,6 @@ int main(void)
 
     while (1)
     {
-        manager.Process();
         bottom_str.Draw();
         /*unsigned rx_length = RS.GetRxLength();
         if (rx_length >= 5)
@@ -108,18 +107,29 @@ int main(void)
         {
             // RS.Transmit((uint8_t *)testing_transmit, strlen(testing_transmit) + 1);
             SystemData temp_data = {};
-            master.Read(&temp_data.batL_voltage, 12, sizeof(temp_data.batL_voltage));
+            master.Read(&temp_data, SLAVE_DATA_REGISTR, sizeof(SystemData)); // АНАЛОГИЧНО pioneer client
             master.Process();
             manager.Process();
-            memcpy(system_data.batL_voltage, temp_data.batL_voltage, sizeof(system_data.batL_voltage));
-            current_window->DataUpdate(&system_data);
-            bottom_str.DataUpdate(&system_data);
-            /*if (std::memcmp(&system_data, &temp_data, sizeof(SystemData)) != 0)
+            for (int i = 0; i < 10; i++)
             {
-                system_data = temp_data;
-                current_window->DataUpdate(&system_data);
-                bottom_str.DataUpdate(&system_data);
-            }*/
+                manager.Process();
+                hydrolib::ReturnCode result = master.Process();
+                if (result == hydrolib::ReturnCode::NO_DATA || result == hydrolib::ReturnCode::TIMEOUT)
+                {
+                    HAL_Delay(10);
+                    continue;
+                }
+                if (result == hydrolib::ReturnCode::OK)
+                {
+                    if (std::memcmp(&system_data, &temp_data, sizeof(SystemData)) != 0)
+                    {
+                        std::memcpy(&system_data, &temp_data, sizeof(SystemData));
+                        current_window->DataUpdate(&system_data);
+                        bottom_str.DataUpdate(&system_data);
+                    }
+                    break;
+                }
+            }
             last_send_time = HAL_GetTick();
         }
 
@@ -160,10 +170,11 @@ int main(void)
             else if (current_window->GetType() == BaseMenu::MISSIONS_MENU)
             {
                 system_data.current_mission = current_window->Enter();
-                master.Write(static_cast<void *>(&system_data.current_mission), offsetof(SystemData, current_mission),
-                             sizeof(system_data.current_mission));
+                master.Write(static_cast<void *>(&system_data.current_mission),
+                             static_cast<int>(offsetof(SystemData, current_mission)),
+                             sizeof(system_data.current_mission)); // АНАЛОГИЧНО pioneer client
                 master.Process();
-                current_window->Draw();
+                manager.Process();
             }
 
             HAL_Delay(100);
