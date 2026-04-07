@@ -26,6 +26,7 @@ extern "C"
 #include "hydrv_rs_485.hpp"
 #include "layouts/bottom_stroke.hpp"
 #include "layouts/diagnostics_menu.hpp"
+#include "layouts/error_log_menu.hpp"
 #include "layouts/main_menu.hpp"
 #include "layouts/mission_launch_menu.hpp"
 #include "layouts/vma_revolutions_menu.hpp"
@@ -158,6 +159,10 @@ int main(void)
                 }
                 else if (current_window->Enter() == 3)
                 {
+                    delete current_window;
+                    current_window = new ErrorLogMenu();
+                    current_window->DataUpdate(&system_data);
+                    current_window->Draw();
                 }
             }
             else if (current_window->GetType() == BaseMenu::DIAGNOSTICS_MENU)

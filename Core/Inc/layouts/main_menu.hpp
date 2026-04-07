@@ -26,7 +26,8 @@ public:
         MAIN_MENU,
         DIAGNOSTICS_MENU,
         VMA_REV_MENU,
-        MISSIONS_MENU
+        MISSIONS_MENU,
+        ERROR_LOG_MENU
     };
     virtual void Draw() = 0;
     virtual void CursorUp() = 0;
