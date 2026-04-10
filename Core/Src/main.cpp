@@ -59,6 +59,9 @@ MemoryMap::SystemData current_system_data = {
     .mission_names = {"--no name--", "--no name--", "--no name--", "--no name--"},
     .error_logs = {"--no logs--", "", "", ""}};
 
+inline BottomSTR bottom_str;
+inline BaseMenu *current_window = nullptr;
+
 inline hydrolib::ReturnCode Memory::Read(void *read_buffer, int address, int length)
 {
     switch (address)
@@ -88,6 +91,10 @@ inline hydrolib::ReturnCode Memory::Write(const void *write_buffer, int address,
     case offsetof(MemoryMap, system_data):
     {
         memcpy(&current_system_data, write_buffer, sizeof(MemoryMap::SystemData));
+        current_window->DataUpdate(&current_system_data);
+        current_window->Draw();
+        bottom_str.DataUpdate(&current_system_data);
+        bottom_str.Draw();
         break;
     }
     default:
@@ -119,14 +126,11 @@ int main(void)
 
     ssd1306_Init();
 
-    BottomSTR bottom_str;
     bottom_str.Draw();
 
-    BaseMenu *current_window = nullptr;
     current_window = new MainMenu();
     current_window->Draw();
 
-    NVIC_SetPriorityGrouping(0);
     RS.Init();
 
     // uint8_t buffer[BUFFER_LENGTH];
