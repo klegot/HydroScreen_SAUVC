@@ -56,6 +56,9 @@ hydrolib::bus::application::Master master(stream, loger);
 static constexpr uint8_t SLAVE_DATA_REGISTR = 0;
 static constexpr uint32_t SEND_INTERVAL = 5000;
 
+inline BottomSTR bottom_str;
+inline BaseMenu *current_window = nullptr;
+
 I2C_HandleTypeDef hi2c1;
 
 SystemData system_data = {.new_vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
@@ -70,6 +73,34 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 
+void DataRead()
+{
+    SystemData temp_data = {};
+    master.Read(&temp_data, SLAVE_DATA_REGISTR, sizeof(SystemData));
+    for (int i = 0; i < 10; i++)
+    {
+        manager.Process();
+        hydrolib::ReturnCode result = master.Process();
+        if (result == hydrolib::ReturnCode::NO_DATA || result == hydrolib::ReturnCode::TIMEOUT)
+        {
+            HAL_Delay(10);
+            continue;
+        }
+        if (result == hydrolib::ReturnCode::OK)
+        {
+            if (std::memcmp(&system_data, &temp_data, sizeof(SystemData)) != 0)
+            {
+                std::memcpy(&system_data, &temp_data, sizeof(SystemData));
+                current_window->DataUpdate(&system_data);
+                current_window->Draw();
+                bottom_str.DataUpdate(&system_data);
+                bottom_str.Draw();
+            }
+            break;
+        }
+    }
+}
+
 int main(void)
 {
     HAL_Init();
@@ -81,14 +112,11 @@ int main(void)
 
     ssd1306_Init();
 
-    BottomSTR bottom_str;
     bottom_str.Draw();
 
-    BaseMenu *current_window = nullptr;
     current_window = new MainMenu();
     current_window->Draw();
 
-    NVIC_SetPriorityGrouping(0);
     RS.Init();
 
     // uint8_t buffer[BUFFER_LENGTH];
@@ -109,32 +137,7 @@ int main(void)
         if (HAL_GetTick() - last_send_time >= SEND_INTERVAL)
         {
             // RS.Transmit((uint8_t *)testing_transmit, strlen(testing_transmit) + 1);
-            SystemData temp_data = {};
-            master.Read(&temp_data, SLAVE_DATA_REGISTR, sizeof(SystemData)); // АНАЛОГИЧНО pioneer client
-            master.Process();
-            manager.Process();
-            for (int i = 0; i < 10; i++)
-            {
-                manager.Process();
-                hydrolib::ReturnCode result = master.Process();
-                if (result == hydrolib::ReturnCode::NO_DATA || result == hydrolib::ReturnCode::TIMEOUT)
-                {
-                    HAL_Delay(10);
-                    continue;
-                }
-                if (result == hydrolib::ReturnCode::OK)
-                {
-                    if (std::memcmp(&system_data, &temp_data, sizeof(SystemData)) != 0)
-                    {
-                        std::memcpy(&system_data, &temp_data, sizeof(SystemData));
-                        current_window->DataUpdate(&system_data);
-                        current_window->Draw();
-                        bottom_str.DataUpdate(&system_data);
-                        bottom_str.Draw();
-                    }
-                    break;
-                }
-            }
+            DataRead();
             last_send_time = HAL_GetTick();
         }
 
@@ -176,7 +179,7 @@ int main(void)
                 system_data.current_mission = current_window->Enter();
                 master.Write(static_cast<void *>(&system_data.current_mission),
                              static_cast<int>(offsetof(SystemData, current_mission)),
-                             sizeof(system_data.current_mission)); // АНАЛОГИЧНО pioneer client
+                             sizeof(system_data.current_mission));
                 master.Process();
                 manager.Process();
             }
