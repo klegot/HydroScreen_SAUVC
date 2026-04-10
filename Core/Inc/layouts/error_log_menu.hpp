@@ -64,7 +64,7 @@ void ErrorLogMenu::Draw()
 
     for (int i = 0; i < MAX_LOGS; i++)
     {
-        ssd1306_SetCursor(10, 12 + i * 10);
-        ssd1306_WriteString(error_logs[i], Font_6x8, White);
+        ssd1306_SetCursor(0, 12 + i * 12);
+        ssd1306_WriteString(error_logs[i], Font_7x10, White);
     }
 }

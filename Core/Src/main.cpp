@@ -49,11 +49,12 @@ public:
     Logger() = default;
 };
 Logger loger;
-hydrolib::bus::datalink::StreamManager manager(1, RS, loger);
+hydrolib::bus::datalink::StreamManager manager(3, RS, loger);
 hydrolib::bus::datalink::Stream stream(manager, 2);
 hydrolib::bus::application::Master master(stream, loger);
 
 static constexpr uint8_t SLAVE_DATA_REGISTR = 0;
+static constexpr uint32_t SEND_INTERVAL = 5000;
 
 I2C_HandleTypeDef hi2c1;
 
@@ -87,12 +88,13 @@ int main(void)
     current_window = new MainMenu();
     current_window->Draw();
 
+    NVIC_SetPriorityGrouping(0);
     RS.Init();
+
     // uint8_t buffer[BUFFER_LENGTH];
     //  const char testing_transmit[] = "hello";
 
     uint32_t last_send_time = 0;
-    const uint32_t send_interval = 5000;
 
     while (1)
     {
@@ -104,7 +106,7 @@ int main(void)
             RS.Transmit(buffer, BUFFER_LENGTH);
         }*/
 
-        if (HAL_GetTick() - last_send_time >= send_interval)
+        if (HAL_GetTick() - last_send_time >= SEND_INTERVAL)
         {
             // RS.Transmit((uint8_t *)testing_transmit, strlen(testing_transmit) + 1);
             SystemData temp_data = {};
@@ -126,7 +128,9 @@ int main(void)
                     {
                         std::memcpy(&system_data, &temp_data, sizeof(SystemData));
                         current_window->DataUpdate(&system_data);
+                        current_window->Draw();
                         bottom_str.DataUpdate(&system_data);
+                        bottom_str.Draw();
                     }
                     break;
                 }
@@ -134,12 +138,7 @@ int main(void)
             last_send_time = HAL_GetTick();
         }
 
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)) // вниз
-        {
-            current_window->CursorDown();
-            HAL_Delay(100);
-        }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)) // выбор
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4)) // выбор
         {
             if (current_window->GetType() == BaseMenu::MAIN_MENU)
             {
@@ -182,27 +181,32 @@ int main(void)
                 manager.Process();
             }
 
-            HAL_Delay(100);
+            HAL_Delay(200);
         }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2)) // вверх
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)) // вверх
         {
             current_window->CursorUp();
-            HAL_Delay(100);
+            HAL_Delay(200);
         }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3)) // отмена
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3)) // вниз
+        {
+            current_window->CursorDown();
+            HAL_Delay(200);
+        }
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)) // отмена
         {
             delete current_window;
             current_window = new MainMenu();
             current_window->Draw();
-            HAL_Delay(100);
+            HAL_Delay(200);
         }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4)) // средняя нижняя
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)) // левая средняя
         {
-            HAL_Delay(100);
+            HAL_Delay(200);
         }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)) // правая нижняя
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2)) // левая верхняя
         {
-            HAL_Delay(100);
+            HAL_Delay(200);
         }
         ssd1306_UpdateScreen();
     }
