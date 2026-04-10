@@ -20,7 +20,7 @@ extern "C"
 }
 #endif
 
-#include "hydrolib_bus_application_master.hpp"
+#include "hydrolib_bus_application_slave.hpp"
 #include "hydrolib_bus_datalink_stream.hpp"
 #include "hydrv_gpio_low.hpp"
 #include "hydrv_rs_485.hpp"
@@ -43,28 +43,66 @@ static constexpr hydrv::UART::UARTLow::UARTPreset USART1_115200_LOW{
     USART1_BASE, 7, RCC_APB2ENR_USART1EN, RCC_BASE + offsetof(RCC_TypeDef, APB2ENR), USART1_IRQn, 39, 1};
 
 constinit hydrv::UART::RS485<255, 255> RS(USART1_115200_LOW, rx_pin, tx_pin, direction_pin, 7);
-class Logger
-{
-public:
-    Logger() = default;
-};
-Logger loger;
-hydrolib::bus::datalink::StreamManager manager(3, RS, loger);
-hydrolib::bus::datalink::Stream stream(manager, 2);
-hydrolib::bus::application::Master master(stream, loger);
 
-static constexpr uint8_t SLAVE_DATA_REGISTR = 0;
-static constexpr uint32_t SEND_INTERVAL = 5000;
+static constexpr void *kLoggerStab = nullptr;
+static inline Memory memory{};
+static inline hydrolib::bus::datalink::StreamManager manager(3, RS, kLoggerStab);
+static inline hydrolib::bus::datalink::Stream stream(manager, 2);
+static inline hydrolib::bus::application::Slave slave(stream, memory, kLoggerStab);
+
+MemoryMap::SystemData current_system_data = {
+    .new_vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
+    .light_status = 0,
+    .current_mission = 0,
+    .batL_voltage = -1,
+    .batR_voltage = -1,
+    .mission_names = {"--no name--", "--no name--", "--no name--", "--no name--"},
+    .error_logs = {"--no logs--", "", "", ""}};
+
+inline hydrolib::ReturnCode Memory::Read(void *read_buffer, int address, int length)
+{
+    switch (address)
+    {
+    case offsetof(MemoryMap, system_data):
+    {
+        memcpy(read_buffer, &current_system_data, sizeof(MemoryMap::SystemData));
+        break;
+    }
+    default:
+        return hydrolib::ReturnCode::FAIL;
+    }
+    length -= sizeof(MemoryMap::SystemData);
+    if (length > 0)
+    {
+
+        void *next_read_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(MemoryMap::SystemData);
+        return Read(next_read_buffer, address + sizeof(MemoryMap::SystemData), length);
+    }
+    return hydrolib::ReturnCode::OK;
+}
+
+inline hydrolib::ReturnCode Memory::Write(const void *write_buffer, int address, int length)
+{
+    switch (address)
+    {
+    case offsetof(MemoryMap, system_data):
+    {
+        memcpy(&current_system_data, write_buffer, sizeof(MemoryMap::SystemData));
+        break;
+    }
+    default:
+        return hydrolib::ReturnCode::FAIL;
+    }
+    length -= sizeof(MemoryMap::SystemData);
+    if (length > 0)
+    {
+        const void *next_write_buffer = static_cast<const uint8_t *>(write_buffer) + sizeof(MemoryMap::SystemData);
+        return Write(next_write_buffer, address + sizeof(MemoryMap::SystemData), length);
+    }
+    return hydrolib::ReturnCode::OK;
+}
 
 I2C_HandleTypeDef hi2c1;
-
-SystemData system_data = {.new_vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
-                          .light_status = 0,
-                          .current_mission = 0,
-                          .batL_voltage = -1,
-                          .batR_voltage = -1,
-                          .mission_names = {"--no name--", "--no name--", "--no name--", "--no name--"},
-                          .error_logs = {"--no logs--", "", "", ""}};
 
 void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
@@ -106,38 +144,6 @@ int main(void)
             RS.Transmit(buffer, BUFFER_LENGTH);
         }*/
 
-        if (HAL_GetTick() - last_send_time >= SEND_INTERVAL)
-        {
-            // RS.Transmit((uint8_t *)testing_transmit, strlen(testing_transmit) + 1);
-            SystemData temp_data = {};
-            master.Read(&temp_data, SLAVE_DATA_REGISTR, sizeof(SystemData)); // АНАЛОГИЧНО pioneer client
-            master.Process();
-            manager.Process();
-            for (int i = 0; i < 10; i++)
-            {
-                manager.Process();
-                hydrolib::ReturnCode result = master.Process();
-                if (result == hydrolib::ReturnCode::NO_DATA || result == hydrolib::ReturnCode::TIMEOUT)
-                {
-                    HAL_Delay(10);
-                    continue;
-                }
-                if (result == hydrolib::ReturnCode::OK)
-                {
-                    if (std::memcmp(&system_data, &temp_data, sizeof(SystemData)) != 0)
-                    {
-                        std::memcpy(&system_data, &temp_data, sizeof(SystemData));
-                        current_window->DataUpdate(&system_data);
-                        current_window->Draw();
-                        bottom_str.DataUpdate(&system_data);
-                        bottom_str.Draw();
-                    }
-                    break;
-                }
-            }
-            last_send_time = HAL_GetTick();
-        }
-
         if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4)) // выбор
         {
             if (current_window->GetType() == BaseMenu::MAIN_MENU)
@@ -146,21 +152,21 @@ int main(void)
                 {
                     delete current_window;
                     current_window = new MissionsMenu();
-                    current_window->DataUpdate(&system_data);
+                    current_window->DataUpdate(&current_system_data);
                     current_window->Draw();
                 }
                 else if (current_window->Enter() == 2)
                 {
                     delete current_window;
                     current_window = new DiagnosticsMenu();
-                    current_window->DataUpdate(&system_data);
+                    current_window->DataUpdate(&current_system_data);
                     current_window->Draw();
                 }
                 else if (current_window->Enter() == 3)
                 {
                     delete current_window;
                     current_window = new ErrorLogMenu();
-                    current_window->DataUpdate(&system_data);
+                    current_window->DataUpdate(&current_system_data);
                     current_window->Draw();
                 }
             }
@@ -168,17 +174,12 @@ int main(void)
             {
                 delete current_window;
                 current_window = new VmaMenu();
-                current_window->DataUpdate(&system_data);
+                current_window->DataUpdate(&current_system_data);
                 current_window->Draw();
             }
             else if (current_window->GetType() == BaseMenu::MISSIONS_MENU)
             {
-                system_data.current_mission = current_window->Enter();
-                master.Write(static_cast<void *>(&system_data.current_mission),
-                             static_cast<int>(offsetof(SystemData, current_mission)),
-                             sizeof(system_data.current_mission)); // АНАЛОГИЧНО pioneer client
-                master.Process();
-                manager.Process();
+                current_system_data.current_mission = current_window->Enter();
             }
 
             HAL_Delay(200);
@@ -280,7 +281,12 @@ static void MX_GPIO_Init(void)
     HAL_GPIO_Init(GPIOA, &GPIO_InitStruct);
 }
 
-extern "C" void RS485_IRQHandler(void) { RS.IRQCallback(); }
+extern "C" void RS485_IRQHandler(void)
+{
+    RS.IRQCallback();
+    manager.Process();
+    slave.Process();
+}
 
 void Error_Handler(void)
 {

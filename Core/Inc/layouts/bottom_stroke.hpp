@@ -30,7 +30,7 @@ public:
     char batR_procent[10];
     bool status;
     void Draw();
-    void DataUpdate(const SystemData *system_data);
+    void DataUpdate(const MemoryMap::SystemData *system_data);
     int CalculatePercent(int voltage_str);
 
     BottomSTR()
@@ -78,7 +78,7 @@ void BottomSTR::UpdateSingleBattery(int16_t raw_value, char *out_v, char *out_p)
     }
 }
 
-void BottomSTR::DataUpdate(const SystemData *system_data)
+void BottomSTR::DataUpdate(const MemoryMap::SystemData *system_data)
 {
     if (!system_data)
         return;

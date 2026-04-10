@@ -32,7 +32,7 @@ public:
     void CursorDown() override;
     void DrawCursor() override;
     int Enter() override;
-    void DataUpdate(const SystemData *system_data) override;
+    void DataUpdate(const MemoryMap::SystemData *system_data) override;
     MenuType GetType() const override { return DIAGNOSTICS_MENU; }
 
     DiagnosticsMenu()
@@ -59,7 +59,7 @@ void DiagnosticsMenu::FormatVoltage(int16_t raw_value, char *out_v)
     }
 }
 
-void DiagnosticsMenu::DataUpdate(const SystemData *system_data)
+void DiagnosticsMenu::DataUpdate(const MemoryMap::SystemData *system_data)
 {
     if (!system_data)
         return;
