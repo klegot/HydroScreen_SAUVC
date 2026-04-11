@@ -111,6 +111,34 @@ void SystemClock_Config(void);
 static void MX_GPIO_Init(void);
 static void MX_I2C1_Init(void);
 
+void DataRead()
+{
+    SystemData temp_data = {};
+    master.Read(&temp_data, SLAVE_DATA_REGISTR, sizeof(SystemData));
+    for (int i = 0; i < 10; i++)
+    {
+        manager.Process();
+        hydrolib::ReturnCode result = master.Process();
+        if (result == hydrolib::ReturnCode::NO_DATA || result == hydrolib::ReturnCode::TIMEOUT)
+        {
+            HAL_Delay(10);
+            continue;
+        }
+        if (result == hydrolib::ReturnCode::OK)
+        {
+            if (std::memcmp(&system_data, &temp_data, sizeof(SystemData)) != 0)
+            {
+                std::memcpy(&system_data, &temp_data, sizeof(SystemData));
+                current_window->DataUpdate(&system_data);
+                current_window->Draw();
+                bottom_str.DataUpdate(&system_data);
+                bottom_str.Draw();
+            }
+            break;
+        }
+    }
+}
+
 int main(void)
 {
     HAL_Init();
