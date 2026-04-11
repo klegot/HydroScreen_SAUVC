@@ -41,7 +41,7 @@ jobs:
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
-          name: firmware-f4
+          name: firmware-f1
           path: |
             ${{ steps.find_files.outputs.bin }}
             ${{ steps.find_files.outputs.elf }}
