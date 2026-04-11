@@ -53,11 +53,11 @@ void VmaMenu::DataUpdate(const MemoryMap::SystemData *system_data)
 
     for (int i = 0; i < VMA_COUNT; i++)
     {
-        if (system_data->new_vma_statuses[i] == 1)
+        if (system_data->vma_statuses[i] == 1)
         {
             strcpy(this->vma_statuses[i], "OK");
         }
-        else if (system_data->new_vma_statuses[i] == 0)
+        else if (system_data->vma_statuses[i] == 0)
         {
             strcpy(this->vma_statuses[i], "ERR");
         }

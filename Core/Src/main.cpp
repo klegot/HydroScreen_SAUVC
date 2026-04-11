@@ -51,7 +51,7 @@ static inline hydrolib::bus::datalink::Stream stream(manager, 2);
 static inline hydrolib::bus::application::Slave slave(stream, memory, kLoggerStab);
 
 MemoryMap::SystemData current_system_data = {
-    .new_vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
+    .vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
     .light_status = 0,
     .current_mission = 0,
     .batL_voltage = -1,
@@ -59,8 +59,8 @@ MemoryMap::SystemData current_system_data = {
     .mission_names = {"--no name--", "--no name--", "--no name--", "--no name--"},
     .error_logs = {"--no logs--", "", "", ""}};
 
-inline BottomSTR bottom_str;
-inline BaseMenu *current_window = nullptr;
+static BaseMenu *current_window = nullptr;
+static BottomSTR bottom_str;
 
 inline hydrolib::ReturnCode Memory::Read(void *read_buffer, int address, int length)
 {
@@ -126,58 +126,49 @@ int main(void)
 
     ssd1306_Init();
 
+    static MainMenu main_menu;
+    static MissionsMenu missions_menu;
+    static DiagnosticsMenu diagnostics_menu;
+    static ErrorLogMenu error_menu;
+    static VmaMenu vma_menu;
+
+    current_window = &main_menu;
+    current_window->Draw();
     bottom_str.Draw();
 
-    current_window = new MainMenu();
-    current_window->Draw();
-
     RS.Init();
-
-    // uint8_t buffer[BUFFER_LENGTH];
-    //  const char testing_transmit[] = "hello";
 
     uint32_t last_send_time = 0;
 
     while (1)
     {
         bottom_str.Draw();
-        /*unsigned rx_length = RS.GetRxLength();
-        if (rx_length >= 5)
-        {
-            RS.Read(buffer, BUFFER_LENGTH);
-            RS.Transmit(buffer, BUFFER_LENGTH);
-        }*/
-
         if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4)) // выбор
         {
             if (current_window->GetType() == BaseMenu::MAIN_MENU)
             {
                 if (current_window->Enter() == 1)
                 {
-                    delete current_window;
-                    current_window = new MissionsMenu();
+                    current_window = &missions_menu;
                     current_window->DataUpdate(&current_system_data);
                     current_window->Draw();
                 }
                 else if (current_window->Enter() == 2)
                 {
-                    delete current_window;
-                    current_window = new DiagnosticsMenu();
+                    current_window = &diagnostics_menu;
                     current_window->DataUpdate(&current_system_data);
                     current_window->Draw();
                 }
                 else if (current_window->Enter() == 3)
                 {
-                    delete current_window;
-                    current_window = new ErrorLogMenu();
+                    current_window = &error_menu;
                     current_window->DataUpdate(&current_system_data);
                     current_window->Draw();
                 }
             }
             else if (current_window->GetType() == BaseMenu::DIAGNOSTICS_MENU)
             {
-                delete current_window;
-                current_window = new VmaMenu();
+                current_window = &vma_menu;
                 current_window->DataUpdate(&current_system_data);
                 current_window->Draw();
             }
@@ -200,8 +191,7 @@ int main(void)
         }
         if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)) // отмена
         {
-            delete current_window;
-            current_window = new MainMenu();
+            current_window = &main_menu;
             current_window->Draw();
             HAL_Delay(200);
         }
