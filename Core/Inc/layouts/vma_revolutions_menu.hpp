@@ -29,7 +29,7 @@ public:
     void CursorDown() override;
     void DrawCursor() override;
     int Enter() override;
-    void DataUpdate(const MemoryMap::SystemData *system_data) override;
+    void DataUpdate(const MemoryMap *system_data) override;
     MenuType GetType() const override { return VMA_REV_MENU; }
 
     VmaMenu()
@@ -46,7 +46,7 @@ public:
     }
 };
 
-void VmaMenu::DataUpdate(const MemoryMap::SystemData *system_data)
+void VmaMenu::DataUpdate(const MemoryMap *system_data)
 {
     if (!system_data)
         return;

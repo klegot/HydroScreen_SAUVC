@@ -50,14 +50,13 @@ static inline hydrolib::bus::datalink::StreamManager manager(3, RS, kLoggerStab)
 static inline hydrolib::bus::datalink::Stream stream(manager, 2);
 static inline hydrolib::bus::application::Slave slave(stream, memory, kLoggerStab);
 
-MemoryMap::SystemData current_system_data = {
-    .vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
-    .light_status = 0,
-    .current_mission = 0,
-    .batL_voltage = -1,
-    .batR_voltage = -1,
-    .mission_names = {"--no name--", "--no name--", "--no name--", "--no name--"},
-    .error_logs = {"--no logs--", "", "", ""}};
+MemoryMap current_system_data = {.vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
+                                 .light_status = 0,
+                                 .current_mission = 0,
+                                 .batL_voltage = -1,
+                                 .batR_voltage = -1,
+                                 .mission_names = {"--no name--", "--no name--", "--no name--", "--no name--"},
+                                 .error_logs = {"--no logs--", "", "", ""}};
 
 static BaseMenu *current_window = nullptr;
 static BottomSTR bottom_str;
@@ -66,20 +65,18 @@ inline hydrolib::ReturnCode Memory::Read(void *read_buffer, int address, int len
 {
     switch (address)
     {
-    case offsetof(MemoryMap, system_data):
-    {
-        memcpy(read_buffer, &current_system_data, sizeof(MemoryMap::SystemData));
+    case 0:
+        memcpy(read_buffer, &current_system_data, sizeof(MemoryMap));
         break;
-    }
     default:
         return hydrolib::ReturnCode::FAIL;
     }
-    length -= sizeof(MemoryMap::SystemData);
+    length -= sizeof(MemoryMap);
     if (length > 0)
     {
 
-        void *next_read_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(MemoryMap::SystemData);
-        return Read(next_read_buffer, address + sizeof(MemoryMap::SystemData), length);
+        void *next_read_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(MemoryMap);
+        return Read(next_read_buffer, address + sizeof(MemoryMap), length);
     }
     return hydrolib::ReturnCode::OK;
 }
@@ -88,23 +85,22 @@ inline hydrolib::ReturnCode Memory::Write(const void *write_buffer, int address,
 {
     switch (address)
     {
-    case offsetof(MemoryMap, system_data):
-    {
-        memcpy(&current_system_data, write_buffer, sizeof(MemoryMap::SystemData));
-        current_window->DataUpdate(&current_system_data);
-        current_window->Draw();
-        bottom_str.DataUpdate(&current_system_data);
-        bottom_str.Draw();
+    case 0:
+        memcpy(&current_system_data, write_buffer, sizeof(MemoryMap));
         break;
-    }
+
     default:
         return hydrolib::ReturnCode::FAIL;
     }
-    length -= sizeof(MemoryMap::SystemData);
+    current_window->DataUpdate(&current_system_data);
+    current_window->Draw();
+    bottom_str.DataUpdate(&current_system_data);
+    bottom_str.Draw();
+    length -= sizeof(MemoryMap);
     if (length > 0)
     {
-        const void *next_write_buffer = static_cast<const uint8_t *>(write_buffer) + sizeof(MemoryMap::SystemData);
-        return Write(next_write_buffer, address + sizeof(MemoryMap::SystemData), length);
+        const void *next_write_buffer = static_cast<const uint8_t *>(write_buffer) + sizeof(MemoryMap);
+        return Write(next_write_buffer, address + sizeof(MemoryMap), length);
     }
     return hydrolib::ReturnCode::OK;
 }

@@ -32,7 +32,7 @@ public:
     void CursorDown() override;
     void DrawCursor() override;
     int Enter() override;
-    void DataUpdate(const MemoryMap::SystemData *system_data) override;
+    void DataUpdate(const MemoryMap *system_data) override;
     MenuType GetType() const override { return DIAGNOSTICS_MENU; }
 
     DiagnosticsMenu()
@@ -59,7 +59,7 @@ void DiagnosticsMenu::FormatVoltage(int16_t raw_value, char *out_v)
     }
 }
 
-void DiagnosticsMenu::DataUpdate(const MemoryMap::SystemData *system_data)
+void DiagnosticsMenu::DataUpdate(const MemoryMap *system_data)
 {
     if (!system_data)
         return;
@@ -70,19 +70,9 @@ void DiagnosticsMenu::DataUpdate(const MemoryMap::SystemData *system_data)
     this->light_status = system_data->light_status;
 }
 
-void DiagnosticsMenu::CursorUp()
-{
-    /*if (Y_curs < count_way - 1) Y_curs++;
-    else Y_curs = 0;
-    DiagnosticsMenu::Draw();*/
-}
+void DiagnosticsMenu::CursorUp() {}
 
-void DiagnosticsMenu::CursorDown()
-{
-    /*if (Y_curs > 0) Y_curs--;
-    else Y_curs = count_way - 1;
-    DiagnosticsMenu::Draw();*/
-}
+void DiagnosticsMenu::CursorDown() {}
 
 int DiagnosticsMenu::Enter() { return 1; }
 
