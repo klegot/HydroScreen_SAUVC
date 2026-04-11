@@ -24,7 +24,7 @@ public:
     void CursorDown() override;
     void DrawCursor() override;
     int Enter() override;
-    void DataUpdate(const SystemData *system_data) override;
+    void DataUpdate(const MemoryMap *system_data) override;
     MenuType GetType() const override { return ERROR_LOG_MENU; }
 
     ErrorLogMenu()
@@ -36,7 +36,7 @@ public:
     }
 };
 
-void ErrorLogMenu::DataUpdate(const SystemData *system_data)
+void ErrorLogMenu::DataUpdate(const MemoryMap *system_data)
 {
     if (!system_data)
         return;

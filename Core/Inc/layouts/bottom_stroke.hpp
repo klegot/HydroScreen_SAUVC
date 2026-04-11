@@ -20,17 +20,17 @@ extern "C"
 class BottomSTR
 {
 private:
+    static constexpr uint8_t Y_btm = 55;
     void UpdateSingleBattery(int16_t raw_data, char *out_v, char *out_p);
 
 public:
-    uint8_t Y_btm;
     char batL_voltage[16];
     char batL_procent[10];
     char batR_voltage[16];
     char batR_procent[10];
     bool status;
     void Draw();
-    void DataUpdate(const SystemData *system_data);
+    void DataUpdate(const MemoryMap *system_data);
     int CalculatePercent(int voltage_str);
 
     BottomSTR()
@@ -40,7 +40,6 @@ public:
         strcpy(batL_procent, "-%");
         strcpy(batR_procent, "-%");
         status = true;
-        Y_btm = 55;
     }
 };
 
@@ -61,7 +60,6 @@ int BottomSTR::CalculatePercent(int voltage_scale)
 
 void BottomSTR::UpdateSingleBattery(int16_t raw_value, char *out_v, char *out_p)
 {
-    // Если значение 0 или отрицательное, считаем, что данных нет
     if (raw_value <= 0)
     {
         strcpy(out_v, "?");
@@ -69,21 +67,18 @@ void BottomSTR::UpdateSingleBattery(int16_t raw_value, char *out_v, char *out_p)
     }
     else
     {
-        // Формируем строку напряжения: 1250 -> "12.50"
         snprintf(out_v, 16, "%d.%02d", raw_value / 100, raw_value % 100);
 
-        // Считаем проценты
         int percent = CalculatePercent(raw_value);
         snprintf(out_p, 10, "%d%%", percent);
     }
 }
 
-void BottomSTR::DataUpdate(const SystemData *system_data)
+void BottomSTR::DataUpdate(const MemoryMap *system_data)
 {
     if (!system_data)
         return;
 
-    // Передаем числа напрямую из структуры
     UpdateSingleBattery(system_data->batL_voltage, this->batL_voltage, this->batL_procent);
     UpdateSingleBattery(system_data->batR_voltage, this->batR_voltage, this->batR_procent);
 }
@@ -96,14 +91,14 @@ void BottomSTR::Draw()
     else
         ssd1306_WriteString("ERROR", Font_6x8, White);
 
-    ssd1306_SetCursor(30, Y_btm);
-    ssd1306_WriteString("BatL", Font_6x8, White);
-    ssd1306_SetCursor(55, Y_btm);
+    ssd1306_SetCursor(33, Y_btm);
+    ssd1306_WriteString("BatL ", Font_6x8, White);
+    ssd1306_SetCursor(60, Y_btm);
     ssd1306_WriteString(batL_procent, Font_6x8, White);
 
-    ssd1306_SetCursor(80, Y_btm);
-    ssd1306_WriteString("BatR", Font_6x8, White);
-    ssd1306_SetCursor(105, Y_btm);
+    ssd1306_SetCursor(83, Y_btm);
+    ssd1306_WriteString("BatR ", Font_6x8, White);
+    ssd1306_SetCursor(110, Y_btm);
     ssd1306_WriteString(batR_procent, Font_6x8, White);
 }
 

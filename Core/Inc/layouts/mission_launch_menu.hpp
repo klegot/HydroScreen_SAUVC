@@ -28,7 +28,7 @@ public:
     void CursorDown() override;
     void DrawCursor() override;
     int Enter() override;
-    void DataUpdate(const SystemData *system_data) override;
+    void DataUpdate(const MemoryMap *system_data) override;
     MenuType GetType() const override { return MISSIONS_MENU; }
 
     MissionsMenu()
@@ -41,7 +41,7 @@ public:
     }
 };
 
-void MissionsMenu::DataUpdate(const SystemData *system_data)
+void MissionsMenu::DataUpdate(const MemoryMap *system_data)
 {
     for (int i = 0; i < MAX_MISSIONS; i++)
     {

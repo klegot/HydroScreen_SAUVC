@@ -19,6 +19,20 @@
                 "interface/stlink.cfg",
                 "target/stm32f1x.cfg"
             ]
+        },
+        {
+            "name": "Release",
+            "cwd": "${workspaceFolder}",
+            "executable": "${workspaceFolder}/build/Release/HydroScreen_SAUVC.elf",
+            "request": "launch",
+            "type": "cortex-debug",
+            "runToEntryPoint": "main",
+            "servertype": "openocd",
+            "device": "stm32f1x",
+            "configFiles": [
+                "interface/stlink.cfg",
+                "target/stm32f1x.cfg"
+            ]
         }
     ]
 }
