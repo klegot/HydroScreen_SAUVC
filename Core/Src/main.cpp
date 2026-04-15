@@ -63,45 +63,225 @@ static BottomSTR bottom_str;
 
 inline hydrolib::ReturnCode Memory::Read(void *read_buffer, int address, int length)
 {
-    switch (address)
+    if (address < 0 || (address + length) > sizeof(MemoryMap))
     {
-    case 0:
-        memcpy(read_buffer, &current_system_data, sizeof(MemoryMap));
-        break;
-    default:
         return hydrolib::ReturnCode::FAIL;
     }
-    length -= sizeof(MemoryMap);
-    if (length > 0)
-    {
 
-        void *next_read_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(MemoryMap);
-        return Read(next_read_buffer, address + sizeof(MemoryMap), length);
+    switch (address)
+    {
+    case offsetof(MemoryMap, vma_statuses):
+    {
+        memcpy(read_buffer, &current_system_data.vma_statuses, sizeof(current_system_data.vma_statuses));
+        length -= sizeof(current_system_data.vma_statuses);
+        if (length > 0)
+        {
+            void *next_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(current_system_data.vma_statuses);
+            return Read(next_buffer, address + sizeof(current_system_data.vma_statuses), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, light_status):
+    {
+        memcpy(read_buffer, &current_system_data.light_status, sizeof(current_system_data.light_status));
+        length -= sizeof(current_system_data.light_status);
+        if (length > 0)
+        {
+            void *next_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(current_system_data.light_status);
+            return Read(next_buffer, address + sizeof(current_system_data.light_status), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, current_mission):
+    {
+        memcpy(read_buffer, &current_system_data.current_mission, sizeof(current_system_data.current_mission));
+        length -= sizeof(current_system_data.current_mission);
+        if (length > 0)
+        {
+            void *next_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(current_system_data.current_mission);
+            return Read(next_buffer, address + sizeof(current_system_data.current_mission), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, batL_voltage):
+    {
+        memcpy(read_buffer, &current_system_data.batL_voltage, sizeof(current_system_data.batL_voltage));
+        length -= sizeof(current_system_data.batL_voltage);
+        if (length > 0)
+        {
+            void *next_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(current_system_data.batL_voltage);
+            return Read(next_buffer, address + sizeof(current_system_data.batL_voltage), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, batR_voltage):
+    {
+        memcpy(read_buffer, &current_system_data.batR_voltage, sizeof(current_system_data.batR_voltage));
+        length -= sizeof(current_system_data.batR_voltage);
+        if (length > 0)
+        {
+            void *next_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(current_system_data.batR_voltage);
+            return Read(next_buffer, address + sizeof(current_system_data.batR_voltage), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, mission_names):
+    {
+        memcpy(read_buffer, &current_system_data.mission_names, sizeof(current_system_data.mission_names));
+        length -= sizeof(current_system_data.mission_names);
+        if (length > 0)
+        {
+            void *next_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(current_system_data.mission_names);
+            return Read(next_buffer, address + sizeof(current_system_data.mission_names), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, error_logs):
+    {
+        memcpy(read_buffer, &current_system_data.error_logs, sizeof(current_system_data.error_logs));
+        length -= sizeof(current_system_data.error_logs);
+        if (length > 0)
+        {
+            void *next_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(current_system_data.error_logs);
+            return Read(next_buffer, address + sizeof(current_system_data.error_logs), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, free_bytes):
+    {
+        memcpy(read_buffer, &current_system_data.free_bytes, sizeof(current_system_data.free_bytes));
+        length -= sizeof(current_system_data.free_bytes);
+        break;
+    }
+    default:
+        return hydrolib::ReturnCode::FAIL;
     }
     return hydrolib::ReturnCode::OK;
 }
 
 inline hydrolib::ReturnCode Memory::Write(const void *write_buffer, int address, int length)
 {
+    if (address < 0 || (address + length) > sizeof(MemoryMap))
+    {
+        return hydrolib::ReturnCode::FAIL;
+    }
+
     switch (address)
     {
-    case 0:
-        memcpy(&current_system_data, write_buffer, sizeof(MemoryMap));
+    case offsetof(MemoryMap, vma_statuses):
+    {
+        memcpy(&current_system_data.vma_statuses, write_buffer, sizeof(current_system_data.vma_statuses));
+        length -= sizeof(current_system_data.vma_statuses);
+        if (length > 0)
+        {
+            const void *next_buffer =
+                static_cast<const uint8_t *>(write_buffer) + sizeof(current_system_data.vma_statuses);
+            return Write(next_buffer, address + sizeof(current_system_data.vma_statuses), length);
+        }
         break;
+    }
+
+    case offsetof(MemoryMap, light_status):
+    {
+        memcpy(&current_system_data.light_status, write_buffer, sizeof(current_system_data.light_status));
+        length -= sizeof(current_system_data.light_status);
+        if (length > 0)
+        {
+            const void *next_buffer =
+                static_cast<const uint8_t *>(write_buffer) + sizeof(current_system_data.light_status);
+            return Write(next_buffer, address + sizeof(current_system_data.light_status), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, current_mission):
+    {
+        memcpy(&current_system_data.current_mission, write_buffer, sizeof(current_system_data.current_mission));
+        length -= sizeof(current_system_data.current_mission);
+        if (length > 0)
+        {
+            const void *next_buffer =
+                static_cast<const uint8_t *>(write_buffer) + sizeof(current_system_data.current_mission);
+            return Write(next_buffer, address + sizeof(current_system_data.current_mission), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, batL_voltage):
+    {
+        memcpy(&current_system_data.batL_voltage, write_buffer, sizeof(current_system_data.batL_voltage));
+        length -= sizeof(current_system_data.batL_voltage);
+        if (length > 0)
+        {
+            const void *next_buffer =
+                static_cast<const uint8_t *>(write_buffer) + sizeof(current_system_data.batL_voltage);
+            return Write(next_buffer, address + sizeof(current_system_data.batL_voltage), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, batR_voltage):
+    {
+        memcpy(&current_system_data.batR_voltage, write_buffer, sizeof(current_system_data.batR_voltage));
+        length -= sizeof(current_system_data.batR_voltage);
+        if (length > 0)
+        {
+            const void *next_buffer =
+                static_cast<const uint8_t *>(write_buffer) + sizeof(current_system_data.batR_voltage);
+            return Write(next_buffer, address + sizeof(current_system_data.batR_voltage), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, mission_names):
+    {
+        memcpy(&current_system_data.mission_names, write_buffer, sizeof(current_system_data.mission_names));
+        length -= sizeof(current_system_data.mission_names);
+        if (length > 0)
+        {
+            const void *next_buffer =
+                static_cast<const uint8_t *>(write_buffer) + sizeof(current_system_data.mission_names);
+            return Write(next_buffer, address + sizeof(current_system_data.mission_names), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, error_logs):
+    {
+        memcpy(&current_system_data.error_logs, write_buffer, sizeof(current_system_data.error_logs));
+        length -= sizeof(current_system_data.error_logs);
+        if (length > 0)
+        {
+            const void *next_buffer =
+                static_cast<const uint8_t *>(write_buffer) + sizeof(current_system_data.error_logs);
+            return Write(next_buffer, address + sizeof(current_system_data.error_logs), length);
+        }
+        break;
+    }
+
+    case offsetof(MemoryMap, free_bytes):
+    {
+        memcpy(&current_system_data.free_bytes, write_buffer, sizeof(current_system_data.free_bytes));
+        length -= sizeof(current_system_data.free_bytes);
+        break;
+    }
 
     default:
         return hydrolib::ReturnCode::FAIL;
     }
+
     current_window->DataUpdate(&current_system_data);
     current_window->Draw();
     bottom_str.DataUpdate(&current_system_data);
     bottom_str.Draw();
-    length -= sizeof(MemoryMap);
-    if (length > 0)
-    {
-        const void *next_write_buffer = static_cast<const uint8_t *>(write_buffer) + sizeof(MemoryMap);
-        return Write(next_write_buffer, address + sizeof(MemoryMap), length);
-    }
+
     return hydrolib::ReturnCode::OK;
 }
 
