@@ -318,7 +318,6 @@ int main(void)
 
     while (1)
     {
-        bottom_str.Draw();
         if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4)) // выбор
         {
             if (current_window->GetType() == BaseMenu::MAIN_MENU)
@@ -352,31 +351,36 @@ int main(void)
             {
                 current_system_data.current_mission = current_window->Enter();
             }
-
+            bottom_str.Draw();
             HAL_Delay(200);
         }
         if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)) // вверх
         {
             current_window->CursorUp();
+            bottom_str.Draw();
             HAL_Delay(200);
         }
         if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3)) // вниз
         {
             current_window->CursorDown();
+            bottom_str.Draw();
             HAL_Delay(200);
         }
         if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)) // отмена
         {
             current_window = &main_menu;
             current_window->Draw();
+            bottom_str.Draw();
             HAL_Delay(200);
         }
         if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)) // левая средняя
         {
+            bottom_str.Draw();
             HAL_Delay(200);
         }
         if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2)) // левая верхняя
         {
+            bottom_str.Draw();
             HAL_Delay(200);
         }
         ssd1306_UpdateScreen();
