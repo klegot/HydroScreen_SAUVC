@@ -25,7 +25,7 @@ private:
 public:
     char batL_voltage[16];
     char batR_voltage[16];
-    bool light_status;
+    bool killsw_status;
     uint8_t Y_curs;
     void Draw() override;
     void CursorUp() override;
@@ -40,7 +40,7 @@ public:
         Y_curs = 0;
         strcpy(batL_voltage, "?");
         strcpy(batR_voltage, "?");
-        light_status = false;
+        killsw_status = false;
     }
 };
 
@@ -67,7 +67,7 @@ void DiagnosticsMenu::DataUpdate(const MemoryMap *system_data)
     FormatVoltage(system_data->batL_voltage, this->batL_voltage);
     FormatVoltage(system_data->batR_voltage, this->batR_voltage);
 
-    this->light_status = system_data->light_status;
+    this->killsw_status = system_data->killsw_status;
 }
 
 void DiagnosticsMenu::CursorUp() {}
@@ -89,9 +89,9 @@ void DiagnosticsMenu::Draw()
     ssd1306_SetCursor(10, 0);
     ssd1306_WriteString("VMA status", Font_7x10, White);
     ssd1306_SetCursor(10, 12);
-    ssd1306_WriteString("lights", Font_7x10, White);
+    ssd1306_WriteString("killSW", Font_7x10, White);
     ssd1306_SetCursor(60, 12);
-    if (light_status)
+    if (killsw_status)
     {
         ssd1306_WriteString("ON", Font_7x10, White);
     }

@@ -19,7 +19,7 @@ extern "C"
 struct MemoryMap
 {
     int8_t vma_statuses[10];     // 1 = "OK"; 0 = "ERROR"
-    int8_t light_status;         // 1 = ON; 0 = OFF
+    int8_t killsw_status;        // 1 = ON; 0 = OFF
     int8_t current_mission;      // current mision's number
     int16_t batL_voltage;        // 1250 => 12.50
     int16_t batR_voltage;        // 1250 => 12.50

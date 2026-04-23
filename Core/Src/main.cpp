@@ -51,7 +51,7 @@ static inline hydrolib::bus::datalink::Stream stream(manager, 2);
 static inline hydrolib::bus::application::Slave slave(stream, memory, kLoggerStab);
 
 MemoryMap current_system_data = {.vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1, -1, -1},
-                                 .light_status = 0,
+                                 .killsw_status = 0,
                                  .current_mission = 0,
                                  .batL_voltage = -1,
                                  .batR_voltage = -1,
@@ -82,14 +82,14 @@ inline hydrolib::ReturnCode Memory::Read(void *read_buffer, int address, int len
         break;
     }
 
-    case offsetof(MemoryMap, light_status):
+    case offsetof(MemoryMap, killsw_status):
     {
-        memcpy(read_buffer, &current_system_data.light_status, sizeof(current_system_data.light_status));
-        length -= sizeof(current_system_data.light_status);
+        memcpy(read_buffer, &current_system_data.killsw_status, sizeof(current_system_data.killsw_status));
+        length -= sizeof(current_system_data.killsw_status);
         if (length > 0)
         {
-            void *next_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(current_system_data.light_status);
-            return Read(next_buffer, address + sizeof(current_system_data.light_status), length);
+            void *next_buffer = static_cast<uint8_t *>(read_buffer) + sizeof(current_system_data.killsw_status);
+            return Read(next_buffer, address + sizeof(current_system_data.killsw_status), length);
         }
         break;
     }
@@ -188,15 +188,15 @@ inline hydrolib::ReturnCode Memory::Write(const void *write_buffer, int address,
         break;
     }
 
-    case offsetof(MemoryMap, light_status):
+    case offsetof(MemoryMap, killsw_status):
     {
-        memcpy(&current_system_data.light_status, write_buffer, sizeof(current_system_data.light_status));
-        length -= sizeof(current_system_data.light_status);
+        memcpy(&current_system_data.killsw_status, write_buffer, sizeof(current_system_data.killsw_status));
+        length -= sizeof(current_system_data.killsw_status);
         if (length > 0)
         {
             const void *next_buffer =
-                static_cast<const uint8_t *>(write_buffer) + sizeof(current_system_data.light_status);
-            return Write(next_buffer, address + sizeof(current_system_data.light_status), length);
+                static_cast<const uint8_t *>(write_buffer) + sizeof(current_system_data.killsw_status);
+            return Write(next_buffer, address + sizeof(current_system_data.killsw_status), length);
         }
         break;
     }
@@ -373,12 +373,23 @@ int main(void)
             bottom_str.Draw();
             HAL_Delay(200);
         }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)) // левая средняя
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)) // левая средняя "F1"
         {
+            current_system_data.current_mission = 0; // 0 => остановка миссии
+            ssd1306_Fill(Black);
+            ssd1306_DrawRectangle(24, 15, 104, 45, White);
+            ssd1306_SetCursor(50, 20);
+            ssd1306_WriteString("STOP", Font_7x10, White);
+            ssd1306_SetCursor(40, 32);
+            ssd1306_WriteString("MISSION", Font_7x10, White);
+            ssd1306_UpdateScreen();
+            HAL_Delay(1750);
+            current_window = &main_menu;
+            current_window->Draw();
             bottom_str.Draw();
             HAL_Delay(200);
         }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2)) // левая верхняя
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2)) // левая верхняя "F2"
         {
             bottom_str.Draw();
             HAL_Delay(200);

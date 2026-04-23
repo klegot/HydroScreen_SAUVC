@@ -844,7 +844,7 @@ void BottomSTR::Draw()
  8000670:	460b      	mov	r3, r1
  8000672:	881b      	ldrh	r3, [r3, #0]
  8000674:	8013      	strh	r3, [r2, #0]
-		light_status = false;
+		killsw_status = false;
  8000676:	687b      	ldr	r3, [r7, #4]
  8000678:	2200      	movs	r2, #0
  800067a:	f883 2024 	strb.w	r2, [r3, #36]	@ 0x24
@@ -988,7 +988,7 @@ void DiagnosticsMenu::DataUpdate(const SystemData* system_data)
  8000776:	4909      	ldr	r1, [pc, #36]	@ (800079c <_ZN15DiagnosticsMenu10DataUpdateEPK10SystemData+0x10c>)
  8000778:	f004 f8f2 	bl	8004960 <siprintf>
 	    } // TODO вынести это в отдельный метод
-	light_status = system_data->light_status;
+	killsw_status = system_data->killsw_status;
  800077c:	683b      	ldr	r3, [r7, #0]
  800077e:	f893 2028 	ldrb.w	r2, [r3, #40]	@ 0x28
  8000782:	687b      	ldr	r3, [r7, #4]
@@ -1129,7 +1129,7 @@ void DiagnosticsMenu::Draw()
  8000852:	210c      	movs	r1, #12
  8000854:	203c      	movs	r0, #60	@ 0x3c
  8000856:	f001 f8d3 	bl	8001a00 <ssd1306_SetCursor>
-	if (light_status) {ssd1306_WriteString("ON", Font_7x10, White);}
+	if (killsw_status) {ssd1306_WriteString("ON", Font_7x10, White);}
  800085a:	687b      	ldr	r3, [r7, #4]
  800085c:	f893 3024 	ldrb.w	r3, [r3, #36]	@ 0x24
  8000860:	2b00      	cmp	r3, #0
@@ -2043,7 +2043,7 @@ void ParseData(const char* data)
  8000e64:	2b00      	cmp	r3, #0
  8000e66:	d00c      	beq.n	8000e82 <_Z9ParseDataPKc+0xc2>
     {
-    	if (token[0] == '1') system_data.light_status = true;
+    	if (token[0] == '1') system_data.killsw_status = true;
  8000e68:	6cfb      	ldr	r3, [r7, #76]	@ 0x4c
  8000e6a:	781b      	ldrb	r3, [r3, #0]
  8000e6c:	2b31      	cmp	r3, #49	@ 0x31
@@ -2052,7 +2052,7 @@ void ParseData(const char* data)
  8000e72:	2201      	movs	r2, #1
  8000e74:	f883 2028 	strb.w	r2, [r3, #40]	@ 0x28
  8000e78:	e003      	b.n	8000e82 <_Z9ParseDataPKc+0xc2>
-    	else system_data.light_status = false;
+    	else system_data.killsw_status = false;
  8000e7a:	4b22      	ldr	r3, [pc, #136]	@ (8000f04 <_Z9ParseDataPKc+0x144>)
  8000e7c:	2200      	movs	r2, #0
  8000e7e:	f883 2028 	strb.w	r2, [r3, #40]	@ 0x28

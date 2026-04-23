@@ -45,15 +45,47 @@ public:
 
 int BottomSTR::CalculatePercent(int voltage_scale)
 {
-    const int MIN_VOLTAGE = 0;        // полностью разряжен
-    const int MAX_VOLTAGE = 17 * 100; // полностью заряжен
-
-    if (voltage_scale < MIN_VOLTAGE)
-        voltage_scale = MIN_VOLTAGE;
-    if (voltage_scale > MAX_VOLTAGE)
-        voltage_scale = MAX_VOLTAGE;
-
-    int percent = static_cast<int>((voltage_scale * 100) / (MAX_VOLTAGE - MIN_VOLTAGE));
+    int percent;
+    if (voltage_scale >= 1680)
+    {
+        percent = 100;
+    }
+    else if (1640 <= voltage_scale)
+    {
+        percent = static_cast<int>(((voltage_scale - 1640) / 4) + 90);
+    }
+    else if (1600 <= voltage_scale)
+    {
+        percent = static_cast<int>(((voltage_scale - 1600) / 4) + 80);
+    }
+    else if (1560 <= voltage_scale)
+    {
+        percent = static_cast<int>(((voltage_scale - 1560) / 2) + 60);
+    }
+    else if (1530 <= voltage_scale)
+    {
+        percent = static_cast<int>(((voltage_scale - 1530) / 3) + 50);
+    }
+    else if (1500 <= voltage_scale)
+    {
+        percent = static_cast<int>(((voltage_scale - 1500) / 3) + 40);
+    }
+    else if (1480 <= voltage_scale)
+    {
+        percent = static_cast<int>(((voltage_scale - 1480) / 2) + 30);
+    }
+    else if (1440 <= voltage_scale)
+    {
+        percent = static_cast<int>(((voltage_scale - 1440) / 4) + 20);
+    }
+    else if (1200 <= voltage_scale)
+    {
+        percent = static_cast<int>(((voltage_scale - 1200) / 12) + 0);
+    }
+    else
+    {
+        percent = 0;
+    }
 
     return percent;
 }
@@ -85,20 +117,20 @@ void BottomSTR::DataUpdate(const MemoryMap *system_data)
 
 void BottomSTR::Draw()
 {
-    ssd1306_SetCursor(3, Y_btm);
+    ssd1306_SetCursor(0, Y_btm);
     if (status)
         ssd1306_WriteString("OK", Font_6x8, White);
     else
-        ssd1306_WriteString("ERROR", Font_6x8, White);
+        ssd1306_WriteString("ERR", Font_6x8, White);
 
-    ssd1306_SetCursor(33, Y_btm);
+    ssd1306_SetCursor(23, Y_btm);
     ssd1306_WriteString("BatL ", Font_6x8, White);
-    ssd1306_SetCursor(60, Y_btm);
+    ssd1306_SetCursor(49, Y_btm);
     ssd1306_WriteString(batL_procent, Font_6x8, White);
 
-    ssd1306_SetCursor(83, Y_btm);
+    ssd1306_SetCursor(76, Y_btm);
     ssd1306_WriteString("BatR ", Font_6x8, White);
-    ssd1306_SetCursor(110, Y_btm);
+    ssd1306_SetCursor(103, Y_btm);
     ssd1306_WriteString(batR_procent, Font_6x8, White);
 }
 
