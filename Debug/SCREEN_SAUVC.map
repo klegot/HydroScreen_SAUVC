@@ -3061,12 +3061,12 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
                 0x080001f8       0x2c ./Core/Src/main.o
                 0x080001f8                MainMenu::MainMenu()
                 0x080001f8                MainMenu::MainMenu()
- .text._ZN8MainMenu8CursorUpEv
+ .text._ZN8MainMenu8CursorDownEv
                 0x08000224       0x32 ./Core/Src/main.o
-                0x08000224                MainMenu::CursorUp()
- .text._ZN8MainMenu10CursorDownEv
+                0x08000224                MainMenu::CursorDown()
+ .text._ZN8MainMenu10CursorUpEv
                 0x08000256       0x32 ./Core/Src/main.o
-                0x08000256                MainMenu::CursorDown()
+                0x08000256                MainMenu::CursorUp()
  .text._ZN8MainMenu5EnterEv
                 0x08000288       0x18 ./Core/Src/main.o
                 0x08000288                MainMenu::Enter()
@@ -3099,12 +3099,12 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .text._ZN15DiagnosticsMenu10DataUpdateEPK10SystemData
                 0x08000690      0x110 ./Core/Src/main.o
                 0x08000690                DiagnosticsMenu::DataUpdate(SystemData const*)
- .text._ZN15DiagnosticsMenu8CursorUpEv
+ .text._ZN15DiagnosticsMenu8CursorDownEv
                 0x080007a0       0x12 ./Core/Src/main.o
-                0x080007a0                DiagnosticsMenu::CursorUp()
- .text._ZN15DiagnosticsMenu10CursorDownEv
+                0x080007a0                DiagnosticsMenu::CursorDown()
+ .text._ZN15DiagnosticsMenu10CursorUpEv
                 0x080007b2       0x12 ./Core/Src/main.o
-                0x080007b2                DiagnosticsMenu::CursorDown()
+                0x080007b2                DiagnosticsMenu::CursorUp()
  .text._ZN15DiagnosticsMenu5EnterEv
                 0x080007c4       0x14 ./Core/Src/main.o
                 0x080007c4                DiagnosticsMenu::Enter()
@@ -3124,12 +3124,12 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .text._ZN7VmaMenu10DataUpdateEPK10SystemData
                 0x080009c0       0x46 ./Core/Src/main.o
                 0x080009c0                VmaMenu::DataUpdate(SystemData const*)
- .text._ZN7VmaMenu8CursorUpEv
+ .text._ZN7VmaMenu8CursorDownEv
                 0x08000a06       0x12 ./Core/Src/main.o
-                0x08000a06                VmaMenu::CursorUp()
- .text._ZN7VmaMenu10CursorDownEv
+                0x08000a06                VmaMenu::CursorDown()
+ .text._ZN7VmaMenu10CursorUpEv
                 0x08000a18       0x12 ./Core/Src/main.o
-                0x08000a18                VmaMenu::CursorDown()
+                0x08000a18                VmaMenu::CursorUp()
  .text._ZN7VmaMenu5EnterEv
                 0x08000a2a       0x14 ./Core/Src/main.o
                 0x08000a2a                VmaMenu::Enter()
@@ -3149,12 +3149,12 @@ LOAD C:/ST/STM32CubeIDE_1.19.0/STM32CubeIDE/plugins/com.st.stm32cube.ide.mcu.ext
  .text._ZN12MissionsMenu10DataUpdateEPK10SystemData
                 0x08000c0c       0x62 ./Core/Src/main.o
                 0x08000c0c                MissionsMenu::DataUpdate(SystemData const*)
- .text._ZN12MissionsMenu8CursorUpEv
+ .text._ZN12MissionsMenu8CursorDownEv
                 0x08000c6e       0x3a ./Core/Src/main.o
-                0x08000c6e                MissionsMenu::CursorUp()
- .text._ZN12MissionsMenu10CursorDownEv
+                0x08000c6e                MissionsMenu::CursorDown()
+ .text._ZN12MissionsMenu10CursorUpEv
                 0x08000ca8       0x3a ./Core/Src/main.o
-                0x08000ca8                MissionsMenu::CursorDown()
+                0x08000ca8                MissionsMenu::CursorUp()
  .text._ZN12MissionsMenu5EnterEv
                 0x08000ce2       0x1a ./Core/Src/main.o
                 0x08000ce2                MissionsMenu::Enter()

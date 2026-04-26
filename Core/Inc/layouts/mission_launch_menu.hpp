@@ -24,8 +24,8 @@ private:
 public:
     uint8_t Y_curs;
     void Draw() override;
-    void CursorUp() override;
     void CursorDown() override;
+    void CursorUp() override;
     void DrawCursor() override;
     int Enter() override;
     void DataUpdate(const MemoryMap *system_data) override;
@@ -50,7 +50,7 @@ void MissionsMenu::DataUpdate(const MemoryMap *system_data)
     }
 }
 
-void MissionsMenu::CursorUp()
+void MissionsMenu::CursorDown()
 {
     if (Y_curs < MAX_MISSIONS - 1)
         Y_curs++;
@@ -59,7 +59,7 @@ void MissionsMenu::CursorUp()
     MissionsMenu::Draw();
 }
 
-void MissionsMenu::CursorDown()
+void MissionsMenu::CursorUp()
 {
     if (Y_curs > 0)
         Y_curs--;

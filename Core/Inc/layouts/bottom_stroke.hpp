@@ -24,9 +24,9 @@ private:
     void UpdateSingleBattery(int16_t raw_data, char *out_v, char *out_p);
 
 public:
-    char batL_voltage[16];
+    char batL_voltage[10];
     char batL_procent[10];
-    char batR_voltage[16];
+    char batR_voltage[10];
     char batR_procent[10];
     bool status;
     void Draw();

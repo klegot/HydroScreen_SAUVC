@@ -4,8 +4,8 @@
 ../Core/Inc/layouts/main_menu.hpp:54:11:virtual BaseMenu::MenuType MainMenu::GetType() const	1
 ../Core/Inc/layouts/main_menu.hpp:24:7:constexpr BaseMenu::BaseMenu()	1
 ../Core/Inc/layouts/main_menu.hpp:55:2:MainMenu::MainMenu()	1
-../Core/Inc/layouts/main_menu.hpp:61:6:virtual void MainMenu::CursorUp()	2
-../Core/Inc/layouts/main_menu.hpp:68:6:virtual void MainMenu::CursorDown()	2
+../Core/Inc/layouts/main_menu.hpp:61:6:virtual void MainMenu::CursorDown()	2
+../Core/Inc/layouts/main_menu.hpp:68:6:virtual void MainMenu::CursorUp()	2
 ../Core/Inc/layouts/main_menu.hpp:75:5:virtual int MainMenu::Enter()	1
 ../Core/Inc/layouts/main_menu.hpp:80:6:virtual void MainMenu::DrawCursor()	1
 ../Core/Inc/layouts/main_menu.hpp:86:6:virtual void MainMenu::Draw()	1
@@ -16,24 +16,24 @@
 ../Core/Inc/layouts/diagnostics_menu.hpp:32:11:virtual BaseMenu::MenuType DiagnosticsMenu::GetType() const	1
 ../Core/Inc/layouts/diagnostics_menu.hpp:35:2:DiagnosticsMenu::DiagnosticsMenu()	1
 ../Core/Inc/layouts/diagnostics_menu.hpp:44:6:virtual void DiagnosticsMenu::DataUpdate(const SystemData*)	7
-../Core/Inc/layouts/diagnostics_menu.hpp:72:6:virtual void DiagnosticsMenu::CursorUp()	1
-../Core/Inc/layouts/diagnostics_menu.hpp:79:6:virtual void DiagnosticsMenu::CursorDown()	1
+../Core/Inc/layouts/diagnostics_menu.hpp:72:6:virtual void DiagnosticsMenu::CursorDown()	1
+../Core/Inc/layouts/diagnostics_menu.hpp:79:6:virtual void DiagnosticsMenu::CursorUp()	1
 ../Core/Inc/layouts/diagnostics_menu.hpp:86:5:virtual int DiagnosticsMenu::Enter()	1
 ../Core/Inc/layouts/diagnostics_menu.hpp:91:6:virtual void DiagnosticsMenu::DrawCursor()	1
 ../Core/Inc/layouts/diagnostics_menu.hpp:97:6:virtual void DiagnosticsMenu::Draw()	2
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:34:11:virtual BaseMenu::MenuType VmaMenu::GetType() const	1
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:36:2:VmaMenu::VmaMenu()	3
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:48:6:virtual void VmaMenu::DataUpdate(const SystemData*)	2
-../Core/Inc/layouts/vma_revolutions_menu.hpp:56:6:virtual void VmaMenu::CursorUp()	1
-../Core/Inc/layouts/vma_revolutions_menu.hpp:60:6:virtual void VmaMenu::CursorDown()	1
+../Core/Inc/layouts/vma_revolutions_menu.hpp:56:6:virtual void VmaMenu::CursorDown()	1
+../Core/Inc/layouts/vma_revolutions_menu.hpp:60:6:virtual void VmaMenu::CursorUp()	1
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:64:5:virtual int VmaMenu::Enter()	1
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:69:6:virtual void VmaMenu::DrawCursor()	1
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:73:6:virtual void VmaMenu::Draw()	5
 ../Core/Inc/layouts/mission_launch_menu.hpp:29:11:virtual BaseMenu::MenuType MissionsMenu::GetType() const	1
 ../Core/Inc/layouts/mission_launch_menu.hpp:31:2:MissionsMenu::MissionsMenu()	2
 ../Core/Inc/layouts/mission_launch_menu.hpp:40:6:virtual void MissionsMenu::DataUpdate(const SystemData*)	2
-../Core/Inc/layouts/mission_launch_menu.hpp:49:6:virtual void MissionsMenu::CursorUp()	2
-../Core/Inc/layouts/mission_launch_menu.hpp:56:6:virtual void MissionsMenu::CursorDown()	2
+../Core/Inc/layouts/mission_launch_menu.hpp:49:6:virtual void MissionsMenu::CursorDown()	2
+../Core/Inc/layouts/mission_launch_menu.hpp:56:6:virtual void MissionsMenu::CursorUp()	2
 ../Core/Inc/layouts/mission_launch_menu.hpp:63:5:virtual int MissionsMenu::Enter()	1
 ../Core/Inc/layouts/mission_launch_menu.hpp:68:6:virtual void MissionsMenu::DrawCursor()	1
 ../Core/Inc/layouts/mission_launch_menu.hpp:74:6:virtual void MissionsMenu::Draw()	2

@@ -4,8 +4,8 @@
 ../Core/Inc/layouts/main_menu.hpp:54:11:virtual BaseMenu::MenuType MainMenu::GetType() const	16	static
 ../Core/Inc/layouts/main_menu.hpp:24:7:constexpr BaseMenu::BaseMenu()	16	static
 ../Core/Inc/layouts/main_menu.hpp:55:2:MainMenu::MainMenu()	16	static
-../Core/Inc/layouts/main_menu.hpp:61:6:virtual void MainMenu::CursorUp()	16	static
-../Core/Inc/layouts/main_menu.hpp:68:6:virtual void MainMenu::CursorDown()	16	static
+../Core/Inc/layouts/main_menu.hpp:61:6:virtual void MainMenu::CursorDown()	16	static
+../Core/Inc/layouts/main_menu.hpp:68:6:virtual void MainMenu::CursorUp()	16	static
 ../Core/Inc/layouts/main_menu.hpp:75:5:virtual int MainMenu::Enter()	16	static
 ../Core/Inc/layouts/main_menu.hpp:80:6:virtual void MainMenu::DrawCursor()	24	static
 ../Core/Inc/layouts/main_menu.hpp:86:6:virtual void MainMenu::Draw()	24	static
@@ -16,24 +16,24 @@
 ../Core/Inc/layouts/diagnostics_menu.hpp:32:11:virtual BaseMenu::MenuType DiagnosticsMenu::GetType() const	16	static
 ../Core/Inc/layouts/diagnostics_menu.hpp:35:2:DiagnosticsMenu::DiagnosticsMenu()	16	static
 ../Core/Inc/layouts/diagnostics_menu.hpp:44:6:virtual void DiagnosticsMenu::DataUpdate(const SystemData*)	40	static
-../Core/Inc/layouts/diagnostics_menu.hpp:72:6:virtual void DiagnosticsMenu::CursorUp()	16	static
-../Core/Inc/layouts/diagnostics_menu.hpp:79:6:virtual void DiagnosticsMenu::CursorDown()	16	static
+../Core/Inc/layouts/diagnostics_menu.hpp:72:6:virtual void DiagnosticsMenu::CursorDown()	16	static
+../Core/Inc/layouts/diagnostics_menu.hpp:79:6:virtual void DiagnosticsMenu::CursorUp()	16	static
 ../Core/Inc/layouts/diagnostics_menu.hpp:86:5:virtual int DiagnosticsMenu::Enter()	16	static
 ../Core/Inc/layouts/diagnostics_menu.hpp:91:6:virtual void DiagnosticsMenu::DrawCursor()	24	static
 ../Core/Inc/layouts/diagnostics_menu.hpp:97:6:virtual void DiagnosticsMenu::Draw()	56	static
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:34:11:virtual BaseMenu::MenuType VmaMenu::GetType() const	16	static
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:36:2:VmaMenu::VmaMenu()	24	static
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:48:6:virtual void VmaMenu::DataUpdate(const SystemData*)	24	static
-../Core/Inc/layouts/vma_revolutions_menu.hpp:56:6:virtual void VmaMenu::CursorUp()	16	static
-../Core/Inc/layouts/vma_revolutions_menu.hpp:60:6:virtual void VmaMenu::CursorDown()	16	static
+../Core/Inc/layouts/vma_revolutions_menu.hpp:56:6:virtual void VmaMenu::CursorDown()	16	static
+../Core/Inc/layouts/vma_revolutions_menu.hpp:60:6:virtual void VmaMenu::CursorUp()	16	static
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:64:5:virtual int VmaMenu::Enter()	16	static
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:69:6:virtual void VmaMenu::DrawCursor()	16	static
 ../Core/Inc/layouts/vma_revolutions_menu.hpp:73:6:virtual void VmaMenu::Draw()	40	static
 ../Core/Inc/layouts/mission_launch_menu.hpp:29:11:virtual BaseMenu::MenuType MissionsMenu::GetType() const	16	static
 ../Core/Inc/layouts/mission_launch_menu.hpp:31:2:MissionsMenu::MissionsMenu()	32	static
 ../Core/Inc/layouts/mission_launch_menu.hpp:40:6:virtual void MissionsMenu::DataUpdate(const SystemData*)	24	static
-../Core/Inc/layouts/mission_launch_menu.hpp:49:6:virtual void MissionsMenu::CursorUp()	16	static
-../Core/Inc/layouts/mission_launch_menu.hpp:56:6:virtual void MissionsMenu::CursorDown()	16	static
+../Core/Inc/layouts/mission_launch_menu.hpp:49:6:virtual void MissionsMenu::CursorDown()	16	static
+../Core/Inc/layouts/mission_launch_menu.hpp:56:6:virtual void MissionsMenu::CursorUp()	16	static
 ../Core/Inc/layouts/mission_launch_menu.hpp:63:5:virtual int MissionsMenu::Enter()	16	static
 ../Core/Inc/layouts/mission_launch_menu.hpp:68:6:virtual void MissionsMenu::DrawCursor()	24	static
 ../Core/Inc/layouts/mission_launch_menu.hpp:74:6:virtual void MissionsMenu::Draw()	32	static

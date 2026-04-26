@@ -21,12 +21,12 @@ class VmaMenu : public BaseMenu
 private:
     static constexpr uint8_t VMA_COUNT = 10;
     char vma_numbers[VMA_COUNT][4];
-    char vma_statuses[VMA_COUNT][10];
+    char vma_statuses[VMA_COUNT][5];
 
 public:
     void Draw() override;
-    void CursorUp() override;
     void CursorDown() override;
+    void CursorUp() override;
     void DrawCursor() override;
     int Enter() override;
     void DataUpdate(const MemoryMap *system_data) override;
@@ -68,9 +68,9 @@ void VmaMenu::DataUpdate(const MemoryMap *system_data)
     }
 }
 
-void VmaMenu::CursorUp() {}
-
 void VmaMenu::CursorDown() {}
+
+void VmaMenu::CursorUp() {}
 
 int VmaMenu::Enter() { return 1; }
 

@@ -20,8 +20,8 @@ private:
 
 public:
     void Draw() override;
-    void CursorUp() override;
     void CursorDown() override;
+    void CursorUp() override;
     void DrawCursor() override;
     int Enter() override;
     void DataUpdate(const MemoryMap *system_data) override;
@@ -48,9 +48,9 @@ void ErrorLogMenu::DataUpdate(const MemoryMap *system_data)
     }
 }
 
-void ErrorLogMenu::CursorUp() {}
-
 void ErrorLogMenu::CursorDown() {}
+
+void ErrorLogMenu::CursorUp() {}
 
 int ErrorLogMenu::Enter() {}
 

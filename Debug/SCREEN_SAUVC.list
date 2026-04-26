@@ -98,7 +98,7 @@ Disassembly of section .text:
  800016e:	4770      	bx	lr
 
 08000170 <_ZN8BaseMenuD1Ev>:
-      virtual void CursorDown() = 0;
+      virtual void CursorUp() = 0;
       virtual void DrawCursor() = 0;
       virtual int Enter() = 0;
       virtual void DataUpdate(const SystemData* system_data) = 0;
@@ -138,8 +138,8 @@ Disassembly of section .text:
 
 080001b0 <_ZN8MainMenu10DataUpdateEPK10SystemData>:
 	void Draw() override ;
-	void CursorUp() override ;
 	void CursorDown() override ;
+	void CursorUp() override ;
 	void DrawCursor() override ;
 	int Enter() override ;
 	void DataUpdate(const SystemData* system_data) override {}
@@ -211,10 +211,10 @@ class BaseMenu {
  800021e:	bf00      	nop
  8000220:	08005bb8 	.word	0x08005bb8
 
-08000224 <_ZN8MainMenu8CursorUpEv>:
+08000224 <_ZN8MainMenu8CursorDownEv>:
 };
 
-void MainMenu::CursorUp()
+void MainMenu::CursorDown()
 {
  8000224:	b580      	push	{r7, lr}
  8000226:	b082      	sub	sp, #8
@@ -224,14 +224,14 @@ void MainMenu::CursorUp()
  800022c:	687b      	ldr	r3, [r7, #4]
  800022e:	791b      	ldrb	r3, [r3, #4]
  8000230:	2b01      	cmp	r3, #1
- 8000232:	d806      	bhi.n	8000242 <_ZN8MainMenu8CursorUpEv+0x1e>
+ 8000232:	d806      	bhi.n	8000242 <_ZN8MainMenu8CursorDownEv+0x1e>
  8000234:	687b      	ldr	r3, [r7, #4]
  8000236:	791b      	ldrb	r3, [r3, #4]
  8000238:	3301      	adds	r3, #1
  800023a:	b2da      	uxtb	r2, r3
  800023c:	687b      	ldr	r3, [r7, #4]
  800023e:	711a      	strb	r2, [r3, #4]
- 8000240:	e002      	b.n	8000248 <_ZN8MainMenu8CursorUpEv+0x24>
+ 8000240:	e002      	b.n	8000248 <_ZN8MainMenu8CursorDownEv+0x24>
 	else Y_curs = 0;
  8000242:	687b      	ldr	r3, [r7, #4]
  8000244:	2200      	movs	r2, #0
@@ -245,9 +245,9 @@ void MainMenu::CursorUp()
  8000252:	46bd      	mov	sp, r7
  8000254:	bd80      	pop	{r7, pc}
 
-08000256 <_ZN8MainMenu10CursorDownEv>:
+08000256 <_ZN8MainMenu10CursorUpEv>:
 
-void MainMenu::CursorDown()
+void MainMenu::CursorUp()
 {
  8000256:	b580      	push	{r7, lr}
  8000258:	b082      	sub	sp, #8
@@ -257,14 +257,14 @@ void MainMenu::CursorDown()
  800025e:	687b      	ldr	r3, [r7, #4]
  8000260:	791b      	ldrb	r3, [r3, #4]
  8000262:	2b00      	cmp	r3, #0
- 8000264:	d006      	beq.n	8000274 <_ZN8MainMenu10CursorDownEv+0x1e>
+ 8000264:	d006      	beq.n	8000274 <_ZN8MainMenu10CursorUpEv+0x1e>
  8000266:	687b      	ldr	r3, [r7, #4]
  8000268:	791b      	ldrb	r3, [r3, #4]
  800026a:	3b01      	subs	r3, #1
  800026c:	b2da      	uxtb	r2, r3
  800026e:	687b      	ldr	r3, [r7, #4]
  8000270:	711a      	strb	r2, [r3, #4]
- 8000272:	e002      	b.n	800027a <_ZN8MainMenu10CursorDownEv+0x24>
+ 8000272:	e002      	b.n	800027a <_ZN8MainMenu10CursorUpEv+0x24>
 	else Y_curs = MENU_ITEMS_COUNT - 1;
  8000274:	687b      	ldr	r3, [r7, #4]
  8000276:	2202      	movs	r2, #2
@@ -792,8 +792,8 @@ void BottomSTR::Draw()
  8000624:	08005ac8 	.word	0x08005ac8
 
 08000628 <_ZNK15DiagnosticsMenu7GetTypeEv>:
-	void CursorUp() override;
 	void CursorDown() override;
+	void CursorUp() override;
 	void DrawCursor() override;
 	int Enter() override;
 	void DataUpdate(const SystemData* system_data) override;
@@ -1003,9 +1003,9 @@ void DiagnosticsMenu::DataUpdate(const SystemData* system_data)
  8000798:	51eb851f 	.word	0x51eb851f
  800079c:	08005aa4 	.word	0x08005aa4
 
-080007a0 <_ZN15DiagnosticsMenu8CursorUpEv>:
+080007a0 <_ZN15DiagnosticsMenu8CursorDownEv>:
 
-void DiagnosticsMenu::CursorUp()
+void DiagnosticsMenu::CursorDown()
 {
  80007a0:	b480      	push	{r7}
  80007a2:	b083      	sub	sp, #12
@@ -1021,9 +1021,9 @@ void DiagnosticsMenu::CursorUp()
  80007ae:	bc80      	pop	{r7}
  80007b0:	4770      	bx	lr
 
-080007b2 <_ZN15DiagnosticsMenu10CursorDownEv>:
+080007b2 <_ZN15DiagnosticsMenu10CursorUpEv>:
 
-void DiagnosticsMenu::CursorDown()
+void DiagnosticsMenu::CursorUp()
 {
  80007b2:	b480      	push	{r7}
  80007b4:	b083      	sub	sp, #12
@@ -1224,8 +1224,8 @@ void DiagnosticsMenu::Draw()
  8000928:	08005ac8 	.word	0x08005ac8
 
 0800092c <_ZNK7VmaMenu7GetTypeEv>:
-	void CursorUp() override;
 	void CursorDown() override;
+	void CursorUp() override;
 	void DrawCursor() override;
 	int Enter() override;
 	void DataUpdate(const SystemData* system_data) override;
@@ -1361,9 +1361,9 @@ void VmaMenu::DataUpdate(const SystemData* system_data)
  8000a02:	46bd      	mov	sp, r7
  8000a04:	bd80      	pop	{r7, pc}
 
-08000a06 <_ZN7VmaMenu8CursorUpEv>:
+08000a06 <_ZN7VmaMenu8CursorDownEv>:
 
-void VmaMenu::CursorUp()
+void VmaMenu::CursorDown()
 {
  8000a06:	b480      	push	{r7}
  8000a08:	b083      	sub	sp, #12
@@ -1376,9 +1376,9 @@ void VmaMenu::CursorUp()
  8000a14:	bc80      	pop	{r7}
  8000a16:	4770      	bx	lr
 
-08000a18 <_ZN7VmaMenu10CursorDownEv>:
+08000a18 <_ZN7VmaMenu10CursorUpEv>:
 
-void VmaMenu::CursorDown()
+void VmaMenu::CursorUp()
 {
  8000a18:	b480      	push	{r7}
  8000a1a:	b083      	sub	sp, #12
@@ -1607,8 +1607,8 @@ void VmaMenu::Draw()
  8000b94:	08006964 	.word	0x08006964
 
 08000b98 <_ZNK12MissionsMenu7GetTypeEv>:
-	void CursorUp() override;
 	void CursorDown() override;
+	void CursorUp() override;
 	void DrawCursor() override;
 	int Enter() override;
 	void DataUpdate(const SystemData* system_data) override;
@@ -1740,9 +1740,9 @@ void MissionsMenu::DataUpdate(const SystemData* system_data)
  8000c6a:	46bd      	mov	sp, r7
  8000c6c:	bd80      	pop	{r7, pc}
 
-08000c6e <_ZN12MissionsMenu8CursorUpEv>:
+08000c6e <_ZN12MissionsMenu8CursorDownEv>:
 
-void MissionsMenu::CursorUp()
+void MissionsMenu::CursorDown()
 {
  8000c6e:	b580      	push	{r7, lr}
  8000c70:	b082      	sub	sp, #8
@@ -1752,14 +1752,14 @@ void MissionsMenu::CursorUp()
  8000c76:	687b      	ldr	r3, [r7, #4]
  8000c78:	f893 3068 	ldrb.w	r3, [r3, #104]	@ 0x68
  8000c7c:	2b03      	cmp	r3, #3
- 8000c7e:	d808      	bhi.n	8000c92 <_ZN12MissionsMenu8CursorUpEv+0x24>
+ 8000c7e:	d808      	bhi.n	8000c92 <_ZN12MissionsMenu8CursorDownEv+0x24>
  8000c80:	687b      	ldr	r3, [r7, #4]
  8000c82:	f893 3068 	ldrb.w	r3, [r3, #104]	@ 0x68
  8000c86:	3301      	adds	r3, #1
  8000c88:	b2da      	uxtb	r2, r3
  8000c8a:	687b      	ldr	r3, [r7, #4]
  8000c8c:	f883 2068 	strb.w	r2, [r3, #104]	@ 0x68
- 8000c90:	e003      	b.n	8000c9a <_ZN12MissionsMenu8CursorUpEv+0x2c>
+ 8000c90:	e003      	b.n	8000c9a <_ZN12MissionsMenu8CursorDownEv+0x2c>
 	else Y_curs = 0;
  8000c92:	687b      	ldr	r3, [r7, #4]
  8000c94:	2200      	movs	r2, #0
@@ -1773,9 +1773,9 @@ void MissionsMenu::CursorUp()
  8000ca4:	46bd      	mov	sp, r7
  8000ca6:	bd80      	pop	{r7, pc}
 
-08000ca8 <_ZN12MissionsMenu10CursorDownEv>:
+08000ca8 <_ZN12MissionsMenu10CursorUpEv>:
 
-void MissionsMenu::CursorDown()
+void MissionsMenu::CursorUp()
 {
  8000ca8:	b580      	push	{r7, lr}
  8000caa:	b082      	sub	sp, #8
@@ -1785,14 +1785,14 @@ void MissionsMenu::CursorDown()
  8000cb0:	687b      	ldr	r3, [r7, #4]
  8000cb2:	f893 3068 	ldrb.w	r3, [r3, #104]	@ 0x68
  8000cb6:	2b00      	cmp	r3, #0
- 8000cb8:	d008      	beq.n	8000ccc <_ZN12MissionsMenu10CursorDownEv+0x24>
+ 8000cb8:	d008      	beq.n	8000ccc <_ZN12MissionsMenu10CursorUpEv+0x24>
  8000cba:	687b      	ldr	r3, [r7, #4]
  8000cbc:	f893 3068 	ldrb.w	r3, [r3, #104]	@ 0x68
  8000cc0:	3b01      	subs	r3, #1
  8000cc2:	b2da      	uxtb	r2, r3
  8000cc4:	687b      	ldr	r3, [r7, #4]
  8000cc6:	f883 2068 	strb.w	r2, [r3, #104]	@ 0x68
- 8000cca:	e003      	b.n	8000cd4 <_ZN12MissionsMenu10CursorDownEv+0x2c>
+ 8000cca:	e003      	b.n	8000cd4 <_ZN12MissionsMenu10CursorUpEv+0x2c>
 	else Y_curs = MAX_MISSIONS  - 1;
  8000ccc:	687b      	ldr	r3, [r7, #4]
  8000cce:	2204      	movs	r2, #4
@@ -2332,7 +2332,7 @@ int main(void)
  8001034:	2b00      	cmp	r3, #0
  8001036:	d008      	beq.n	800104a <main+0x12e>
 	  {
-		  current_window->CursorDown();
+		  current_window->CursorUp();
  8001038:	6bfb      	ldr	r3, [r7, #60]	@ 0x3c
  800103a:	681b      	ldr	r3, [r3, #0]
  800103c:	3308      	adds	r3, #8
@@ -2558,7 +2558,7 @@ int main(void)
  80011d0:	2b00      	cmp	r3, #0
  80011d2:	d008      	beq.n	80011e6 <main+0x2ca>
 	  {
-		  current_window->CursorUp();
+		  current_window->CursorDown();
  80011d4:	6bfb      	ldr	r3, [r7, #60]	@ 0x3c
  80011d6:	681b      	ldr	r3, [r3, #0]
  80011d8:	3304      	adds	r3, #4

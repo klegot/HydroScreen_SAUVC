@@ -30,8 +30,8 @@ public:
         ERROR_LOG_MENU
     };
     virtual void Draw() = 0;
-    virtual void CursorUp() = 0;
     virtual void CursorDown() = 0;
+    virtual void CursorUp() = 0;
     virtual void DrawCursor() = 0;
     virtual int Enter() = 0;
     virtual void DataUpdate(const MemoryMap *system_data) = 0;
@@ -41,14 +41,11 @@ public:
 
 class MainMenu : public BaseMenu
 {
-private:
-    static constexpr uint8_t MENU_ITEMS_COUNT = 3;
-
 public:
     uint8_t Y_curs;
     void Draw() override;
-    void CursorUp() override;
     void CursorDown() override;
+    void CursorUp() override;
     void DrawCursor() override;
     int Enter() override;
     void DataUpdate(const MemoryMap *system_data) override {}
@@ -56,21 +53,21 @@ public:
     MainMenu() { Y_curs = 0; }
 };
 
-void MainMenu::CursorUp()
+void MainMenu::CursorDown()
 {
-    if (Y_curs < MENU_ITEMS_COUNT - 1)
+    if (Y_curs < 2)
         Y_curs++;
     else
         Y_curs = 0;
     MainMenu::Draw();
 }
 
-void MainMenu::CursorDown()
+void MainMenu::CursorUp()
 {
     if (Y_curs > 0)
         Y_curs--;
     else
-        Y_curs = MENU_ITEMS_COUNT - 1;
+        Y_curs = 2;
     MainMenu::Draw();
 }
 

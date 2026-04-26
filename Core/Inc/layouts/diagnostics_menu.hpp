@@ -28,8 +28,8 @@ public:
     bool killsw_status;
     uint8_t Y_curs;
     void Draw() override;
-    void CursorUp() override;
     void CursorDown() override;
+    void CursorUp() override;
     void DrawCursor() override;
     int Enter() override;
     void DataUpdate(const MemoryMap *system_data) override;
@@ -70,9 +70,9 @@ void DiagnosticsMenu::DataUpdate(const MemoryMap *system_data)
     this->killsw_status = system_data->killsw_status;
 }
 
-void DiagnosticsMenu::CursorUp() {}
-
 void DiagnosticsMenu::CursorDown() {}
+
+void DiagnosticsMenu::CursorUp() {}
 
 int DiagnosticsMenu::Enter() { return 1; }
 
