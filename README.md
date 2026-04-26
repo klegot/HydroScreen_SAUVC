@@ -42,8 +42,8 @@ git clone --recursive https://github.com/klegot/HydroScreen_SAUVC.git
 ```
 
 **Основные зависимости:**
-* `Drivers/Hydrodrivers` — [SeaJackal/Hydrodrivers](https://github.com)
-* `Hydrolib` — [SeaJackal/Hydrolib-soft](https://github.com)
+* `Drivers/Hydrodrivers` — [SeaJackal/Hydrodrivers](https://github.com/SeaJackal/Hydrodrivers.git)
+* `Hydrolib` — [SeaJackal/Hydrolib-soft](https://github.com/SeaJackal/Hydrolib-soft.git)
 
 ## 📟 Аппаратная конфигурация (UART1)
 Конфигурация периферии микроконтроллера **STM32F103**:
