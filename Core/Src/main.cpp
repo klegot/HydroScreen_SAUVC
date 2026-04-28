@@ -55,7 +55,7 @@ MemoryMap current_system_data = {.vma_statuses = {-1, -1, -1, -1, -1, -1, -1, -1
                                  .current_mission = 0,
                                  .batL_voltage = -1,
                                  .batR_voltage = -1,
-                                 .mission_names = {"--no name--", "--no name--", "--no name--", "--no name--"},
+                                 .mission_names = {"--no name1--", "--no name2--", "--no name3--", "--no name4--"},
                                  .error_logs = {"--no logs--", "", "", ""}};
 
 static BaseMenu *current_window = nullptr;
@@ -301,6 +301,7 @@ int main(void)
     MX_I2C1_Init();
 
     ssd1306_Init();
+    RS.Init();
 
     static MainMenu main_menu;
     static MissionsMenu missions_menu;
@@ -312,13 +313,9 @@ int main(void)
     current_window->Draw();
     bottom_str.Draw();
 
-    RS.Init();
-
-    uint32_t last_send_time = 0;
-
     while (1)
     {
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4)) // выбор
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_4)) // выбор (верхняя средняя)
         {
             if (current_window->GetType() == BaseMenu::MAIN_MENU)
             {
@@ -354,26 +351,27 @@ int main(void)
             bottom_str.Draw();
             HAL_Delay(200);
         }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)) // вверх
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_5)) // вверх (верхняя левая)
         {
             current_window->CursorUp();
             bottom_str.Draw();
             HAL_Delay(200);
         }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3)) // вниз
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_3)) // вниз (верхняя правая)
         {
             current_window->CursorDown();
             bottom_str.Draw();
             HAL_Delay(200);
         }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)) // отмена
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_0)) // отмена (правая верхняя)
         {
+            current_window->Reset();
             current_window = &main_menu;
             current_window->Draw();
             bottom_str.Draw();
             HAL_Delay(200);
         }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)) // левая средняя "F1"
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_1)) // "F1" (правая средняя)
         {
             current_system_data.current_mission = 0; // остановка миссии
             ssd1306_Fill(Black);
@@ -383,12 +381,12 @@ int main(void)
             ssd1306_WriteString("MISSION", Font_7x10, White);
             ssd1306_UpdateScreen();
             HAL_Delay(1750);
+            current_window->Reset();
             current_window = &main_menu;
             current_window->Draw();
             bottom_str.Draw();
-            HAL_Delay(200);
         }
-        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2)) // левая верхняя "F2"
+        if (!HAL_GPIO_ReadPin(GPIOA, GPIO_PIN_2)) // "F2" (правая нижняя)
         {
             bottom_str.Draw();
             HAL_Delay(200);

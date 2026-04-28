@@ -23,13 +23,14 @@ public:
     void CursorDown() override;
     void CursorUp() override;
     void DrawCursor() override;
+    void Reset() override {};
     int Enter() override;
     void DataUpdate(const MemoryMap *system_data) override;
     MenuType GetType() const override { return ERROR_LOG_MENU; }
 
     ErrorLogMenu()
     {
-        for (int i = 0; i < MAX_LOGS; i++)
+        for (int i = 0; i < MAX_LOGS - 1; i++)
         {
             snprintf(error_logs[i], 16, "---");
         }
@@ -62,7 +63,7 @@ void ErrorLogMenu::Draw()
     ssd1306_SetCursor(0, 0);
     ssd1306_WriteString("error logs:", Font_7x10, White);
 
-    for (int i = 0; i < MAX_LOGS; i++)
+    for (int i = 0; i < MAX_LOGS - 1; i++)
     {
         ssd1306_SetCursor(0, 12 + i * 12);
         ssd1306_WriteString(error_logs[i], Font_7x10, White);

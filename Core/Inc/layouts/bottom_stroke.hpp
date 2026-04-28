@@ -21,12 +21,10 @@ class BottomSTR
 {
 private:
     static constexpr uint8_t Y_btm = 55;
-    void UpdateSingleBattery(int16_t raw_data, char *out_v, char *out_p);
+    void UpdateSingleBattery(int16_t raw_data, char *out_procent);
 
 public:
-    char batL_voltage[10];
     char batL_procent[10];
-    char batR_voltage[10];
     char batR_procent[10];
     bool status;
     void Draw();
@@ -35,8 +33,6 @@ public:
 
     BottomSTR()
     {
-        strcpy(batL_voltage, "?");
-        strcpy(batR_voltage, "?");
         strcpy(batL_procent, "-%");
         strcpy(batR_procent, "-%");
         status = true;
@@ -90,19 +86,16 @@ int BottomSTR::CalculatePercent(int voltage_scale)
     return percent;
 }
 
-void BottomSTR::UpdateSingleBattery(int16_t raw_value, char *out_v, char *out_p)
+void BottomSTR::UpdateSingleBattery(int16_t raw_value, char *out_procent)
 {
     if (raw_value <= 0)
     {
-        strcpy(out_v, "?");
-        strcpy(out_p, "-%");
+        strcpy(out_procent, "-%");
     }
     else
     {
-        snprintf(out_v, 16, "%d.%02d", raw_value / 100, raw_value % 100);
-
         int percent = CalculatePercent(raw_value);
-        snprintf(out_p, 10, "%d%%", percent);
+        snprintf(out_procent, 10, "%d%%", percent);
     }
 }
 
@@ -111,8 +104,8 @@ void BottomSTR::DataUpdate(const MemoryMap *system_data)
     if (!system_data)
         return;
 
-    UpdateSingleBattery(system_data->batL_voltage, this->batL_voltage, this->batL_procent);
-    UpdateSingleBattery(system_data->batR_voltage, this->batR_voltage, this->batR_procent);
+    UpdateSingleBattery(system_data->batL_voltage, this->batL_procent);
+    UpdateSingleBattery(system_data->batR_voltage, this->batR_procent);
 }
 
 void BottomSTR::Draw()

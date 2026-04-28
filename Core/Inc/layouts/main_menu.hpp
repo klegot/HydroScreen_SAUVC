@@ -33,6 +33,7 @@ public:
     virtual void CursorDown() = 0;
     virtual void CursorUp() = 0;
     virtual void DrawCursor() = 0;
+    virtual void Reset() = 0;
     virtual int Enter() = 0;
     virtual void DataUpdate(const MemoryMap *system_data) = 0;
     virtual MenuType GetType() const = 0;
@@ -47,6 +48,7 @@ public:
     void CursorDown() override;
     void CursorUp() override;
     void DrawCursor() override;
+    void Reset() override {};
     int Enter() override;
     void DataUpdate(const MemoryMap *system_data) override {}
     MenuType GetType() const override { return MAIN_MENU; }

@@ -1638,7 +1638,7 @@ void VmaMenu::Draw()
  8000bbc:	4a11      	ldr	r2, [pc, #68]	@ (8000c04 <_ZN12MissionsMenuC1Ev+0x58>)
  8000bbe:	687b      	ldr	r3, [r7, #4]
  8000bc0:	601a      	str	r2, [r3, #0]
-	    for (int i = 0; i < MAX_MISSIONS ; i++) {
+	    for (int i = 0; i < MAX_MISSION_COUNT ; i++) {
  8000bc2:	2300      	movs	r3, #0
  8000bc4:	60fb      	str	r3, [r7, #12]
  8000bc6:	e011      	b.n	8000bec <_ZN12MissionsMenuC1Ev+0x40>
@@ -1658,7 +1658,7 @@ void VmaMenu::Draw()
  8000be0:	6020      	str	r0, [r4, #0]
  8000be2:	6061      	str	r1, [r4, #4]
  8000be4:	60a2      	str	r2, [r4, #8]
-	    for (int i = 0; i < MAX_MISSIONS ; i++) {
+	    for (int i = 0; i < MAX_MISSION_COUNT ; i++) {
  8000be6:	68fb      	ldr	r3, [r7, #12]
  8000be8:	3301      	adds	r3, #1
  8000bea:	60fb      	str	r3, [r7, #12]
@@ -1689,7 +1689,7 @@ void MissionsMenu::DataUpdate(const SystemData* system_data)
  8000c10:	af00      	add	r7, sp, #0
  8000c12:	6078      	str	r0, [r7, #4]
  8000c14:	6039      	str	r1, [r7, #0]
-    for (int i = 0; i < MAX_MISSIONS ; i++)
+    for (int i = 0; i < MAX_MISSION_COUNT ; i++)
  8000c16:	2300      	movs	r3, #0
  8000c18:	60fb      	str	r3, [r7, #12]
  8000c1a:	e020      	b.n	8000c5e <_ZN12MissionsMenu10DataUpdateEPK10SystemData+0x52>
@@ -1725,7 +1725,7 @@ void MissionsMenu::DataUpdate(const SystemData* system_data)
  8000c52:	3317      	adds	r3, #23
  8000c54:	2200      	movs	r2, #0
  8000c56:	701a      	strb	r2, [r3, #0]
-    for (int i = 0; i < MAX_MISSIONS ; i++)
+    for (int i = 0; i < MAX_MISSION_COUNT ; i++)
  8000c58:	68fb      	ldr	r3, [r7, #12]
  8000c5a:	3301      	adds	r3, #1
  8000c5c:	60fb      	str	r3, [r7, #12]
@@ -1748,7 +1748,7 @@ void MissionsMenu::CursorDown()
  8000c70:	b082      	sub	sp, #8
  8000c72:	af00      	add	r7, sp, #0
  8000c74:	6078      	str	r0, [r7, #4]
-	if (Y_curs < MAX_MISSIONS  - 1) Y_curs++;
+	if (Y_curs < MAX_MISSION_COUNT  - 1) Y_curs++;
  8000c76:	687b      	ldr	r3, [r7, #4]
  8000c78:	f893 3068 	ldrb.w	r3, [r3, #104]	@ 0x68
  8000c7c:	2b03      	cmp	r3, #3
@@ -1793,7 +1793,7 @@ void MissionsMenu::CursorUp()
  8000cc4:	687b      	ldr	r3, [r7, #4]
  8000cc6:	f883 2068 	strb.w	r2, [r3, #104]	@ 0x68
  8000cca:	e003      	b.n	8000cd4 <_ZN12MissionsMenu10CursorUpEv+0x2c>
-	else Y_curs = MAX_MISSIONS  - 1;
+	else Y_curs = MAX_MISSION_COUNT  - 1;
  8000ccc:	687b      	ldr	r3, [r7, #4]
  8000cce:	2204      	movs	r2, #4
  8000cd0:	f883 2068 	strb.w	r2, [r3, #104]	@ 0x68
@@ -1882,7 +1882,7 @@ void MissionsMenu::Draw()
  8000d58:	cb0e      	ldmia	r3, {r1, r2, r3}
  8000d5a:	4817      	ldr	r0, [pc, #92]	@ (8000db8 <_ZN12MissionsMenu4DrawEv+0x7c>)
  8000d5c:	f000 fe2a 	bl	80019b4 <ssd1306_WriteString>
-	for (int i = 0; i < MAX_MISSIONS ; i ++)
+	for (int i = 0; i < MAX_MISSION_COUNT ; i ++)
  8000d60:	2300      	movs	r3, #0
  8000d62:	60fb      	str	r3, [r7, #12]
  8000d64:	e01d      	b.n	8000da2 <_ZN12MissionsMenu4DrawEv+0x66>
@@ -1914,7 +1914,7 @@ void MissionsMenu::Draw()
  8000d94:	9200      	str	r2, [sp, #0]
  8000d96:	cb0e      	ldmia	r3, {r1, r2, r3}
  8000d98:	f000 fe0c 	bl	80019b4 <ssd1306_WriteString>
-	for (int i = 0; i < MAX_MISSIONS ; i ++)
+	for (int i = 0; i < MAX_MISSION_COUNT ; i ++)
  8000d9c:	68fb      	ldr	r3, [r7, #12]
  8000d9e:	3301      	adds	r3, #1
  8000da0:	60fb      	str	r3, [r7, #12]

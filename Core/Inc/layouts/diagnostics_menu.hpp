@@ -31,6 +31,7 @@ public:
     void CursorDown() override;
     void CursorUp() override;
     void DrawCursor() override;
+    void Reset() override {};
     int Enter() override;
     void DataUpdate(const MemoryMap *system_data) override;
     MenuType GetType() const override { return DIAGNOSTICS_MENU; }
